@@ -21,6 +21,17 @@
     <script type="text/babel">
         const { useState } = React;
         
+        const LOGO_URL = "https://www.taazaa.com/wp-content/uploads/2024/03/Taazaa-Logo.png";
+        
+        const TaazaaLogo = ({ className, style }) => (
+            <img 
+                src={LOGO_URL} 
+                alt="Taazaa Logo" 
+                className={className} 
+                style={{ height: 'auto', width: '100%', maxWidth: '50px', ...style }} 
+            />
+        );
+        
         const ChevronLeft = () => (
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -75,21 +86,6 @@
             </svg>
         );
 
-        // Replace the placeholder URL below with the actual public URL where your logo is hosted
-const LOGO_URL = "https://www.taazaa.com/wp-content/uploads/2024/03/Taazaa-Logo.png"; 
-// OR, if you use a PNG version for better compatibility with <img>:
-// const LOGO_URL = "https://example.com/images/taazaa-logo.png"; 
-
-const TaazaaLogo = ({ className, style }) => (
-    <img 
-        src={LOGO_URL} 
-        alt="Taazaa Logo" 
-        className={className} 
-        // These styles ensure the aspect ratio is maintained and it scales correctly
-        style={{ height: 'auto', width: '100%', maxWidth: '50px', ...style }} 
-    />
-);
-
         const SlideShow = () => {
           const [currentSlide, setCurrentSlide] = useState(0);
 
@@ -99,11 +95,11 @@ const TaazaaLogo = ({ className, style }) => (
               subtitle: "The Power of Small Actions",
               icon: Users,
               content: (
-                <div className="text-center space-y-8">
-                  <TaazaaLogo className="w-32 h-32 mx-auto" />
-                  <div className="space-y-4">
-                    <h2 className="text-4xl font-bold text-[#0A4D68]">Leadership Through Example</h2>
-                    <p className="text-2xl text-gray-700">
+                <div className="text-center space-y-6">
+                  <TaazaaLogo style={{ maxWidth: '200px', margin: '0 auto' }} />
+                  <div className="space-y-4 mt-8">
+                    <h2 className="text-3xl md:text-4xl font-bold text-[#0A4D68]">Leadership Through Example</h2>
+                    <p className="text-xl md:text-2xl text-gray-700">
                       "Your team doesn't just hear what you say—<br/>they watch what you do"
                     </p>
                   </div>
@@ -115,317 +111,12 @@ const TaazaaLogo = ({ className, style }) => (
               subtitle: "Your behavior sets the standard",
               icon: Target,
               content: (
-                <div className="space-y-6">
-                  <div className="bg-[#3DD598]/10 p-6 rounded-lg border-l-4 border-[#3DD598]">
-                    <h3 className="text-xl font-semibold mb-3 text-[#0A4D68]">As a lead, you are:</h3>
-                    <ul className="space-y-3 text-lg text-gray-700">
-                      <li className="flex items-start">
-                        <span className="text-[#3DD598] mr-3 text-2xl">•</span>
-                        <span>The reference point for acceptable behavior</span>
-                      </li>
-                      <li className="flex items-start">
-                        <span className="text-[#3DD598] mr-3 text-2xl">•</span>
-                        <span>The living example of company values</span>
-                      </li>
-                      <li className="flex items-start">
-                        <span className="text-[#3DD598] mr-3 text-2xl">•</span>
-                        <span>The culture carrier for your team</span>
-                      </li>
-                    </ul>
-                  </div>
-                  <p className="text-xl text-gray-600 text-center italic">
-                    Your team will mirror your habits—good or bad
-                  </p>
-                </div>
-              )
-            },
-            {
-              title: "Being On Time",
-              subtitle: "Respect starts with punctuality",
-              icon: Clock,
-              content: (
-                <div className="space-y-6">
-                  <div className="grid grid-cols-2 gap-6">
-                    <div className="bg-red-50 p-5 rounded-lg border-l-4 border-red-500">
-                      <h4 className="font-semibold text-red-900 mb-3 flex items-center">
-                        <span className="text-2xl mr-2">❌</span> What NOT to do
-                      </h4>
-                      <ul className="space-y-2 text-gray-700">
-                        <li>• Arriving 10-15 mins late regularly</li>
-                        <li>• Joining meetings after they start</li>
-                        <li>• No heads-up when delayed</li>
-                      </ul>
-                    </div>
-                    <div className="bg-[#3DD598]/10 p-5 rounded-lg border-l-4 border-[#3DD598]">
-                      <h4 className="font-semibold text-[#0A4D68] mb-3 flex items-center">
-                        <span className="text-2xl mr-2">✅</span> What to do
-                      </h4>
-                      <ul className="space-y-2 text-gray-700">
-                        <li>• Be 2-3 mins early</li>
-                        <li>• Join meetings on time</li>
-                        <li>• Communicate delays proactively</li>
-                      </ul>
-                    </div>
-                  </div>
-                  <div className="bg-[#0A4D68]/10 p-5 rounded-lg border-l-4 border-[#0A4D68]">
-                    <h4 className="font-semibold text-[#0A4D68] mb-2">Why it matters:</h4>
-                    <p className="text-gray-700">When you're late, your team learns that deadlines are flexible, others' time isn't valuable, and commitments are optional. Soon, stand-ups start late, deliverables slip, and "5 minutes" becomes 20.</p>
-                  </div>
-                </div>
-              )
-            },
-            {
-              title: "Calendar Etiquette",
-              subtitle: "Accept, Decline, or Tentative—but always respond",
-              icon: Calendar,
-              content: (
-                <div className="space-y-6">
-                  <div className="bg-orange-50 p-5 rounded-lg border-l-4 border-orange-500">
-                    <h4 className="font-semibold text-orange-900 mb-3">The Problem:</h4>
-                    <p className="text-gray-700 mb-3">Meeting invites sitting in "no response" state. Organizers don't know if you're coming. Team copies this behavior.</p>
-                  </div>
-                  <div className="grid grid-cols-3 gap-4">
-                    <div className="bg-[#3DD598]/10 p-4 rounded-lg text-center border-2 border-[#3DD598]">
-                      <div className="text-3xl mb-2">✓</div>
-                      <div className="font-semibold text-[#0A4D68]">Accept</div>
-                      <div className="text-sm text-gray-600 mt-1">I'll be there</div>
-                    </div>
-                    <div className="bg-yellow-100 p-4 rounded-lg text-center border-2 border-yellow-500">
-                      <div className="text-3xl mb-2">?</div>
-                      <div className="font-semibold text-yellow-900">Tentative</div>
-                      <div className="text-sm text-gray-600 mt-1">I'll try to attend</div>
-                    </div>
-                    <div className="bg-red-100 p-4 rounded-lg text-center border-2 border-red-500">
-                      <div className="text-3xl mb-2">✗</div>
-                      <div className="font-semibold text-red-900">Decline</div>
-                      <div className="text-sm text-gray-600 mt-1">Can't make it</div>
-                    </div>
-                  </div>
-                  <div className="bg-[#0A4D68]/10 p-5 rounded-lg border-l-4 border-[#0A4D68]">
-                    <h4 className="font-semibold text-[#0A4D68] mb-2">Why it matters:</h4>
-                    <p className="text-gray-700">Unacknowledged invites create planning chaos. Your team learns that commitments are vague, and soon no one knows who's attending what. Projects stall because "I didn't know I was needed."</p>
-                  </div>
-                </div>
-              )
-            },
-            {
-              title: "Remote Work Responsiveness",
-              subtitle: "Communication is your presence",
-              icon: MessageSquare,
-              content: (
-                <div className="space-y-6">
-                  <div className="bg-red-50 p-5 rounded-lg border-l-4 border-red-500">
-                    <h4 className="font-semibold text-red-900 mb-3 flex items-center">
-                      <AlertCircle className="w-5 h-5 mr-2" />
-                      Real Example: The 3-4 Hour Gap
-                    </h4>
-                    <p className="text-gray-700 mb-3">Team member messages you at 10 AM with a blocker. You respond at 2 PM. They've been stuck for 4 hours.</p>
-                    <p className="text-gray-700 font-semibold">Your team learns: "Remote = Unavailable"</p>
-                  </div>
-                  <div className="grid grid-cols-2 gap-6">
-                    <div className="space-y-3">
-                      <h4 className="font-semibold text-gray-900">❌ Don't:</h4>
-                      <ul className="space-y-2 text-gray-700">
-                        <li>• Go silent for hours</li>
-                        <li>• Ignore urgent pings</li>
-                        <li>• Respond only when convenient</li>
-                      </ul>
-                    </div>
-                    <div className="space-y-3">
-                      <h4 className="font-semibold text-[#0A4D68]">✅ Do:</h4>
-                      <ul className="space-y-2 text-gray-700">
-                        <li>• Respond within 30 mins</li>
-                        <li>• Set status when away</li>
-                        <li>• Quick "Looking into it" message</li>
-                      </ul>
-                    </div>
-                  </div>
-                  <div className="bg-[#0A4D68]/10 p-5 rounded-lg border-l-4 border-[#0A4D68]">
-                    <h4 className="font-semibold text-[#0A4D68] mb-2">Why it matters:</h4>
-                    <p className="text-gray-700">Slow responses cascade. Your team starts delaying responses too. "Async work" becomes "ignore for hours." Productivity craters. Trust erodes.</p>
-                  </div>
-                </div>
-              )
-            },
-            {
-              title: "Video On = Engaged",
-              subtitle: "Cameras build connection and accountability",
-              icon: Video,
-              content: (
-                <div className="space-y-6">
-                  <div className="bg-gray-100 p-5 rounded-lg border-l-4 border-gray-500">
-                    <h4 className="font-semibold text-gray-900 mb-3">The Issue:</h4>
-                    <p className="text-gray-700">Lead joins with camera off. Team follows. Meetings become disengaged black boxes. People multitask, half-listen, miss cues.</p>
-                  </div>
-                  <div className="grid grid-cols-2 gap-6">
-                    <div className="bg-red-50 p-5 rounded-lg border-l-4 border-red-500">
-                      <h4 className="font-semibold text-red-900 mb-3">Camera Off Signal:</h4>
-                      <ul className="space-y-2 text-gray-700">
-                        <li>• "I'm not fully present"</li>
-                        <li>• "This isn't important"</li>
-                        <li>• "I'm probably multitasking"</li>
-                      </ul>
-                    </div>
-                    <div className="bg-[#3DD598]/10 p-5 rounded-lg border-l-4 border-[#3DD598]">
-                      <h4 className="font-semibold text-[#0A4D68] mb-3">Camera On Signal:</h4>
-                      <ul className="space-y-2 text-gray-700">
-                        <li>• "I'm fully engaged"</li>
-                        <li>• "You have my attention"</li>
-                        <li>• "I'm accountable to you"</li>
-                      </ul>
-                    </div>
-                  </div>
-                  <div className="bg-[#0A4D68]/10 p-5 rounded-lg border-l-4 border-[#0A4D68]">
-                    <h4 className="font-semibold text-[#0A4D68] mb-2">Why it matters:</h4>
-                    <p className="text-gray-700">Remote work without cameras kills team cohesion. Humans read faces, not voices alone. When you turn your camera off, your team learns that presence is optional. Collaboration suffers. Relationships weaken.</p>
-                  </div>
-                </div>
-              )
-            },
-            {
-              title: "The 1-on-1 Commitment",
-              subtitle: "Skipping sends a message",
-              icon: Users,
-              content: (
-                <div className="space-y-6">
-                  <div className="bg-red-50 p-5 rounded-lg border-l-4 border-red-500">
-                    <h4 className="font-semibold text-red-900 mb-3">When you skip or cancel 1-on-1s:</h4>
-                    <p className="text-gray-700 mb-3">Your team hears: "You're not a priority. Other work matters more than you."</p>
-                    <p className="text-gray-700 font-semibold">Result: They stop prioritizing their own 1-on-1s. Problems go unspoken. Attrition rises.</p>
-                  </div>
-                  <div className="bg-[#3DD598]/10 p-5 rounded-lg border-l-4 border-[#3DD598]">
-                    <h4 className="font-semibold text-[#0A4D68] mb-3">Protect these meetings:</h4>
-                    <ul className="space-y-2 text-gray-700">
-                      <li>• Treat them as unmovable commitments</li>
-                      <li>• If you must reschedule, do it proactively with a specific new time</li>
-                      <li>• Never cancel—postpone only in real emergencies</li>
-                      <li>• Come prepared and focused</li>
-                    </ul>
-                  </div>
-                  <div className="bg-[#0A4D68]/10 p-5 rounded-lg border-l-4 border-[#0A4D68]">
-                    <h4 className="font-semibold text-[#0A4D68] mb-2">Why it matters:</h4>
-                    <p className="text-gray-700">1-on-1s are where trust is built, problems are caught early, and careers are developed. Skipping them tells your team that people are optional. They'll treat their team the same way. Culture crumbles from the top.</p>
-                  </div>
-                </div>
-              )
-            },
-            {
-              title: "Ownership & Proactiveness",
-              subtitle: "Debug first, ask questions second",
-              icon: Target,
-              content: (
-                <div className="space-y-6">
-                  <div className="bg-red-50 p-5 rounded-lg border-l-4 border-red-500">
-                    <h4 className="font-semibold text-red-900 mb-3">❌ The Wrong Approach:</h4>
-                    <p className="text-gray-700 mb-3 italic">"Hey team, what's causing this issue? Can someone check?"</p>
-                    <p className="text-gray-700 font-semibold">Message sent: "Leaders delegate problems, they don't solve them."</p>
-                  </div>
-                  <div className="bg-[#3DD598]/10 p-5 rounded-lg border-l-4 border-[#3DD598]">
-                    <h4 className="font-semibold text-[#0A4D68] mb-3">✅ The Right Approach:</h4>
-                    <p className="text-gray-700 mb-3 italic">"I've debugged the issue. It's in the auth service—connection timeout. I'm deploying a fix now. Will monitor for 30 mins."</p>
-                    <p className="text-gray-700 font-semibold">Message sent: "Leaders roll up their sleeves and fix problems."</p>
-                  </div>
-                  <div className="bg-[#0A4D68]/10 p-5 rounded-lg border-l-4 border-[#0A4D68]">
-                    <h4 className="font-semibold text-[#0A4D68] mb-2">Why it matters:</h4>
-                    <p className="text-gray-700">When you immediately ask "What's the issue?" instead of investigating, your team learns to escalate instead of solving. They become order-takers, not problem-solvers. Ownership dies. Innovation stops.</p>
-                  </div>
-                  <div className="bg-[#3DD598]/10 p-5 rounded-lg border-l-4 border-[#3DD598]">
-                    <h4 className="font-semibold text-[#0A4D68] mb-2">The Standard:</h4>
-                    <p className="text-gray-700">Investigate → Understand → Act → Communicate. Ask questions after you've done the work to understand. Show your team what ownership looks like.</p>
-                  </div>
-                </div>
-              )
-            },
-            {
-              title: "The Ripple Effect",
-              subtitle: "Small actions create big patterns",
-              icon: AlertCircle,
-              content: (
-                <div className="space-y-6">
-                  <div className="bg-gradient-to-r from-[#0A4D68]/10 to-[#3DD598]/10 p-6 rounded-lg border-2 border-[#3DD598]">
-                    <h3 className="text-xl font-bold text-[#0A4D68] mb-4">The Pattern:</h3>
-                    <div className="space-y-4">
-                      <div className="flex items-start space-x-3">
-                        <div className="text-2xl">1️⃣</div>
-                        <div>
-                          <p className="font-semibold text-gray-900">You show a behavior</p>
-                          <p className="text-gray-600 text-sm">Late to meetings, slow responses, camera off</p>
-                        </div>
-                      </div>
-                      <div className="flex items-center justify-center text-2xl text-[#3DD598]">↓</div>
-                      <div className="flex items-start space-x-3">
-                        <div className="text-2xl">2️⃣</div>
-                        <div>
-                          <p className="font-semibold text-gray-900">Your team adopts it</p>
-                          <p className="text-gray-600 text-sm">"If the lead does it, it must be okay"</p>
-                        </div>
-                      </div>
-                      <div className="flex items-center justify-center text-2xl text-[#3DD598]">↓</div>
-                      <div className="flex items-start space-x-3">
-                        <div className="text-2xl">3️⃣</div>
-                        <div>
-                          <p className="font-semibold text-gray-900">It becomes team culture</p>
-                          <p className="text-gray-600 text-sm">The new normal—hard to reverse</p>
-                        </div>
-                      </div>
-                      <div className="flex items-center justify-center text-2xl text-[#3DD598]">↓</div>
-                      <div className="flex items-start space-x-3">
-                        <div className="text-2xl">4️⃣</div>
-                        <div>
-                          <p className="font-semibold text-gray-900">Performance suffers</p>
-                          <p className="text-gray-600 text-sm">Delays, miscommunication, missed goals</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="bg-[#0A4D68]/10 p-5 rounded-lg border-l-4 border-[#0A4D68]">
-                    <p className="text-lg text-gray-700 text-center font-semibold">
-                      You can't expect your team to behave better than you do.
-                    </p>
-                  </div>
-                </div>
-              )
-            },
-            {
-              title: "Your Action Plan",
-              subtitle: "What changes this week?",
-              icon: Target,
-              content: (
-                <div className="space-y-6">
-                  <div className="bg-[#0A4D68]/10 p-6 rounded-lg border-l-4 border-[#3DD598]">
-                    <h3 className="text-xl font-semibold text-[#0A4D68] mb-4">This Week's Commitments:</h3>
-                    <div className="space-y-3">
-                      <div className="flex items-start space-x-3">
-                        <input type="checkbox" className="mt-1 w-5 h-5 accent-[#3DD598]" />
-                        <label className="text-gray-700">Be on time (or early) to every meeting</label>
-                      </div>
-                      <div className="flex items-start space-x-3">
-                        <input type="checkbox" className="mt-1 w-5 h-5 accent-[#3DD598]" />
-                        <label className="text-gray-700">Respond to calendar invites within 24 hours</label>
-                      </div>
-                      <div className="flex items-start space-x-3">
-                        <input type="checkbox" className="mt-1 w-5 h-5 accent-[#3DD598]" />
-                        <label className="text-gray-700">Reply to messages within 30 minutes on work days</label>
-                      </div>
-                      <div className="flex items-start space-x-3">
-                        <input type="checkbox" className="mt-1 w-5 h-5 accent-[#3DD598]" />
-                        <label className="text-gray-700">Turn camera on for all team meetings</label>
-                      </div>
-                      <div className="flex items-start space-x-3">
-                        <input type="checkbox" className="mt-1 w-5 h-5 accent-[#3DD598]" />
-                        <label className="text-gray-700">Protect all scheduled 1-on-1s this week</label>
-                      </div>
-                      <div className="flex items-start space-x-3">
-                        <input type="checkbox" className="mt-1 w-5 h-5 accent-[#3DD598]" />
-                        <label className="text-gray-700">Debug an issue before asking the team about it</label>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="bg-[#3DD598]/10 p-6 rounded-lg border-l-4 border-[#3DD598] text-center">
-                    <p className="text-xl text-[#0A4D68] font-semibold mb-2">
+                <div className="space-y-4 md:space-y-6">
+                  <div className="bg-[#3DD598]/10 p-4 md:p-5 rounded-lg border-l-4 border-[#3DD598] text-center">
+                    <p className="text-base md:text-lg text-[#0A4D68] font-semibold mb-2">
                       Remember:
                     </p>
-                    <p className="text-lg text-gray-700">
+                    <p className="text-sm md:text-base text-gray-700">
                       Your team is always watching. Lead by example.<br/>Small actions compound into culture.
                     </p>
                   </div>
@@ -437,15 +128,15 @@ const TaazaaLogo = ({ className, style }) => (
               subtitle: "Let's talk about your challenges",
               icon: MessageSquare,
               content: (
-                <div className="text-center space-y-8">
-                  <TaazaaLogo className="w-24 h-24 mx-auto" />
-                  <div className="space-y-4">
-                    <p className="text-2xl text-gray-700">Which of these resonates most with your team?</p>
-                    <p className="text-2xl text-gray-700">What behaviors do you want to change first?</p>
-                    <p className="text-2xl text-gray-700">What challenges do you face in modeling these behaviors?</p>
+                <div className="text-center space-y-4 md:space-y-6">
+                  <TaazaaLogo style={{ maxWidth: '150px', margin: '0 auto' }} />
+                  <div className="space-y-3 md:space-y-4">
+                    <p className="text-base md:text-xl text-gray-700">Which of these resonates most with your team?</p>
+                    <p className="text-base md:text-xl text-gray-700">What behaviors do you want to change first?</p>
+                    <p className="text-base md:text-xl text-gray-700">What challenges do you face in modeling these behaviors?</p>
                   </div>
-                  <div className="bg-[#0A4D68]/10 p-6 rounded-lg border-l-4 border-[#3DD598] mt-8">
-                    <p className="text-lg text-gray-700 italic">
+                  <div className="bg-[#0A4D68]/10 p-4 md:p-5 rounded-lg border-l-4 border-[#3DD598] mt-4 md:mt-6">
+                    <p className="text-sm md:text-base text-gray-700 italic">
                       "Leadership is not about being in charge.<br/>It's about taking care of those in your charge."<br/>— Simon Sinek
                     </p>
                   </div>
@@ -453,6 +144,288 @@ const TaazaaLogo = ({ className, style }) => (
               )
             }
           ];
+
+          // Additional slides (restored)
+          slides.push(
+            {
+              title: "Being On Time",
+              subtitle: "Respect starts with punctuality",
+              icon: Clock,
+              content: (
+                <div className="space-y-4 md:space-y-5">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                    <div className="bg-red-50 p-3 md:p-4 rounded-lg border-l-4 border-red-500">
+                      <h4 className="font-semibold text-red-900 mb-2 md:mb-3 flex items-center text-sm md:text-base">
+                        <span className="text-lg md:text-xl mr-2">❌</span> What NOT to do
+                      </h4>
+                      <ul className="space-y-1 md:space-y-2 text-gray-700 text-xs md:text-sm">
+                        <li>• Arriving 10-15 mins late regularly</li>
+                        <li>• Joining meetings after they start</li>
+                        <li>• No heads-up when delayed</li>
+                      </ul>
+                    </div>
+                    <div className="bg-[#3DD598]/10 p-3 md:p-4 rounded-lg border-l-4 border-[#3DD598]">
+                      <h4 className="font-semibold text-[#0A4D68] mb-2 md:mb-3 flex items-center text-sm md:text-base">
+                        <span className="text-lg md:text-xl mr-2">✅</span> What to do
+                      </h4>
+                      <ul className="space-y-1 md:space-y-2 text-gray-700 text-xs md:text-sm">
+                        <li>• Be 2-3 mins early</li>
+                        <li>• Join meetings on time</li>
+                        <li>• Communicate delays proactively</li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div className="bg-[#0A4D68]/10 p-3 md:p-4 rounded-lg border-l-4 border-[#0A4D68]">
+                    <h4 className="font-semibold text-[#0A4D68] mb-2 text-sm md:text-base">Why it matters:</h4>
+                    <p className="text-gray-700 text-xs md:text-sm">When you're late, your team learns that deadlines are flexible, others' time isn't valuable, and commitments are optional. Soon, stand-ups start late, deliverables slip, and "5 minutes" becomes 20.</p>
+                  </div>
+                </div>
+              )
+            },
+            {
+              title: "Calendar Etiquette",
+              subtitle: "Accept, Decline, or Tentative—but always respond",
+              icon: Calendar,
+              content: (
+                <div className="space-y-4 md:space-y-5">
+                  <div className="bg-orange-50 p-3 md:p-4 rounded-lg border-l-4 border-orange-500">
+                    <h4 className="font-semibold text-orange-900 mb-2 text-sm md:text-base">The Problem:</h4>
+                    <p className="text-gray-700 text-xs md:text-sm">Meeting invites sitting in "no response" state. Organizers don't know if you're coming. Team copies this behavior.</p>
+                  </div>
+                  <div className="grid grid-cols-3 gap-2 md:gap-4">
+                    <div className="bg-[#3DD598]/10 p-2 md:p-4 rounded-lg text-center border-2 border-[#3DD598]">
+                      <div className="text-xl md:text-2xl mb-1">✓</div>
+                      <div className="font-semibold text-[#0A4D68] text-xs md:text-base">Accept</div>
+                      <div className="text-xs text-gray-600 mt-1 hidden md:block">I'll be there</div>
+                    </div>
+                    <div className="bg-yellow-100 p-2 md:p-4 rounded-lg text-center border-2 border-yellow-500">
+                      <div className="text-xl md:text-2xl mb-1">?</div>
+                      <div className="font-semibold text-yellow-900 text-xs md:text-base">Tentative</div>
+                      <div className="text-xs text-gray-600 mt-1 hidden md:block">I'll try</div>
+                    </div>
+                    <div className="bg-red-100 p-2 md:p-4 rounded-lg text-center border-2 border-red-500">
+                      <div className="text-xl md:text-2xl mb-1">✗</div>
+                      <div className="font-semibold text-red-900 text-xs md:text-base">Decline</div>
+                      <div className="text-xs text-gray-600 mt-1 hidden md:block">Can't make it</div>
+                    </div>
+                  </div>
+                  <div className="bg-[#0A4D68]/10 p-3 md:p-4 rounded-lg border-l-4 border-[#0A4D68]">
+                    <h4 className="font-semibold text-[#0A4D68] mb-2 text-sm md:text-base">Why it matters:</h4>
+                    <p className="text-gray-700 text-xs md:text-sm">Unacknowledged invites create planning chaos. Your team learns that commitments are vague, and soon no one knows who's attending what.</p>
+                  </div>
+                </div>
+              )
+            },
+            {
+              title: "Remote Work Responsiveness",
+              subtitle: "Communication is your presence",
+              icon: MessageSquare,
+              content: (
+                <div className="space-y-3 md:space-y-4">
+                  <div className="bg-red-50 p-3 md:p-4 rounded-lg border-l-4 border-red-500">
+                    <h4 className="font-semibold text-red-900 mb-2 flex items-center text-sm md:text-base">
+                      <AlertCircle className="w-4 h-4 md:w-5 md:h-5 mr-2" />
+                      Real Example: The 3-4 Hour Gap
+                    </h4>
+                    <p className="text-gray-700 mb-2 text-xs md:text-sm">Team member messages you at 10 AM with a blocker. You respond at 2 PM. They've been stuck for 4 hours.</p>
+                    <p className="text-gray-700 font-semibold text-xs md:text-sm">Your team learns: "Remote = Unavailable"</p>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
+                    <div className="space-y-2">
+                      <h4 className="font-semibold text-gray-900 text-sm md:text-base">❌ Don't:</h4>
+                      <ul className="space-y-1 text-gray-700 text-xs md:text-sm">
+                        <li>• Go silent for hours</li>
+                        <li>• Ignore urgent pings</li>
+                        <li>• Respond only when convenient</li>
+                      </ul>
+                    </div>
+                    <div className="space-y-2">
+                      <h4 className="font-semibold text-[#0A4D68] text-sm md:text-base">✅ Do:</h4>
+                      <ul className="space-y-1 text-gray-700 text-xs md:text-sm">
+                        <li>• Respond within 30 mins</li>
+                        <li>• Set status when away</li>
+                        <li>• Quick "Looking into it" message</li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div className="bg-[#0A4D68]/10 p-3 md:p-4 rounded-lg border-l-4 border-[#0A4D68]">
+                    <h4 className="font-semibold text-[#0A4D68] mb-2 text-sm md:text-base">Why it matters:</h4>
+                    <p className="text-gray-700 text-xs md:text-sm">Slow responses cascade. Your team starts delaying responses too. "Async work" becomes "ignore for hours." Productivity craters.</p>
+                  </div>
+                </div>
+              )
+            },
+            {
+              title: "Video On = Engaged",
+              subtitle: "Cameras build connection and accountability",
+              icon: Video,
+              content: (
+                <div className="space-y-4 md:space-y-5">
+                  <div className="bg-gray-100 p-3 md:p-4 rounded-lg border-l-4 border-gray-500">
+                    <h4 className="font-semibold text-gray-900 mb-2 text-sm md:text-base">The Issue:</h4>
+                    <p className="text-gray-700 text-xs md:text-sm">Lead joins with camera off. Team follows. Meetings become disengaged black boxes. People multitask, half-listen, miss cues.</p>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
+                    <div className="bg-red-50 p-3 md:p-4 rounded-lg border-l-4 border-red-500">
+                      <h4 className="font-semibold text-red-900 mb-2 text-sm md:text-base">Camera Off Signal:</h4>
+                      <ul className="space-y-1 text-gray-700 text-xs md:text-sm">
+                        <li>• "I'm not fully present"</li>
+                        <li>• "This isn't important"</li>
+                        <li>• "I'm probably multitasking"</li>
+                      </ul>
+                    </div>
+                    <div className="bg-[#3DD598]/10 p-3 md:p-4 rounded-lg border-l-4 border-[#3DD598]">
+                      <h4 className="font-semibold text-[#0A4D68] mb-2 text-sm md:text-base">Camera On Signal:</h4>
+                      <ul className="space-y-1 text-gray-700 text-xs md:text-sm">
+                        <li>• "I'm fully engaged"</li>
+                        <li>• "You have my attention"</li>
+                        <li>• "I'm accountable to you"</li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div className="bg-[#0A4D68]/10 p-3 md:p-4 rounded-lg border-l-4 border-[#0A4D68]">
+                    <h4 className="font-semibold text-[#0A4D68] mb-2 text-sm md:text-base">Why it matters:</h4>
+                    <p className="text-gray-700 text-xs md:text-sm">Remote work without cameras kills team cohesion. When you turn your camera off, your team learns that presence is optional.</p>
+                  </div>
+                </div>
+              )
+            },
+            {
+              title: "The 1-on-1 Commitment",
+              subtitle: "Skipping sends a message",
+              icon: Users,
+              content: (
+                <div className="space-y-3">
+                  <div className="bg-red-50 p-3 rounded-lg border-l-4 border-red-500">
+                    <h4 className="font-semibold text-red-900 mb-2 text-xs md:text-sm">When you skip or cancel 1-on-1s:</h4>
+                    <p className="text-gray-700 text-xs mb-1">Your team hears: "You're not a priority."</p>
+                    <p className="text-gray-700 font-semibold text-xs">Result: They stop prioritizing their 1-on-1s. Problems go unspoken.</p>
+                  </div>
+                  <div className="bg-[#3DD598]/10 p-3 rounded-lg border-l-4 border-[#3DD598]">
+                    <h4 className="font-semibold text-[#0A4D68] mb-2 text-xs md:text-sm">Protect these meetings:</h4>
+                    <ul className="space-y-1 text-gray-700 text-xs">
+                      <li>• Treat them as unmovable commitments</li>
+                      <li>• If you must reschedule, do it proactively</li>
+                      <li>• Never cancel—postpone only in emergencies</li>
+                      <li>• Come prepared and focused</li>
+                    </ul>
+                  </div>
+                  <div className="bg-[#0A4D68]/10 p-3 rounded-lg border-l-4 border-[#0A4D68]">
+                    <h4 className="font-semibold text-[#0A4D68] mb-2 text-xs md:text-sm">Why it matters:</h4>
+                    <p className="text-gray-700 text-xs">1-on-1s are where trust is built and problems are caught early. Skipping them tells your team that people are optional. Culture crumbles from the top.</p>
+                  </div>
+                </div>
+              )
+            },
+            {
+              title: "Ownership & Proactiveness",
+              subtitle: "Debug first, ask questions second",
+              icon: Target,
+              content: (
+                <div className="space-y-3">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div className="bg-red-50 p-3 rounded-lg border-l-4 border-red-500">
+                      <h4 className="font-semibold text-red-900 mb-2 text-xs md:text-sm">❌ Wrong:</h4>
+                      <p className="text-gray-700 mb-2 italic text-xs">"Hey team, what's causing this issue?"</p>
+                      <p className="text-gray-700 font-semibold text-xs">Leaders delegate problems</p>
+                    </div>
+                    <div className="bg-[#3DD598]/10 p-3 rounded-lg border-l-4 border-[#3DD598]">
+                      <h4 className="font-semibold text-[#0A4D68] mb-2 text-xs md:text-sm">✅ Right:</h4>
+                      <p className="text-gray-700 mb-2 italic text-xs">"I've debugged it. Auth timeout. Deploying fix."</p>
+                      <p className="text-gray-700 font-semibold text-xs">Leaders solve problems</p>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div className="bg-[#0A4D68]/10 p-3 rounded-lg border-l-4 border-[#0A4D68]">
+                      <h4 className="font-semibold text-[#0A4D68] mb-2 text-xs md:text-sm">Why it matters:</h4>
+                      <p className="text-gray-700 text-xs">When you ask instead of investigating, your team learns to escalate, not solve. Ownership dies.</p>
+                    </div>
+                    <div className="bg-[#3DD598]/10 p-3 rounded-lg border-l-4 border-[#3DD598]">
+                      <h4 className="font-semibold text-[#0A4D68] mb-2 text-xs md:text-sm">The Standard:</h4>
+                      <p className="text-gray-700 text-xs">Investigate → Understand → Act → Communicate. Show ownership.</p>
+                    </div>
+                  </div>
+                </div>
+              )
+            },
+            {
+              title: "The Ripple Effect",
+              subtitle: "Small actions create big patterns",
+              icon: AlertCircle,
+              content: (
+                <div className="space-y-4">
+                  <div className="bg-gradient-to-r from-[#0A4D68]/10 to-[#3DD598]/10 p-4 rounded-lg border-2 border-[#3DD598]">
+                    <h3 className="text-sm md:text-base font-bold text-[#0A4D68] mb-3">The Pattern:</h3>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                      <div className="text-center">
+                        <div className="text-lg md:text-xl mb-1">1️⃣</div>
+                        <p className="font-semibold text-gray-900 text-xs">You show behavior</p>
+                        <p className="text-gray-600 text-xs mt-1">Late, slow</p>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-lg md:text-xl mb-1">2️⃣</div>
+                        <p className="font-semibold text-gray-900 text-xs">Team adopts</p>
+                        <p className="text-gray-600 text-xs mt-1">"Must be OK"</p>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-lg md:text-xl mb-1">3️⃣</div>
+                        <p className="font-semibold text-gray-900 text-xs">Becomes culture</p>
+                        <p className="text-gray-600 text-xs mt-1">Hard to fix</p>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-lg md:text-xl mb-1">4️⃣</div>
+                        <p className="font-semibold text-gray-900 text-xs">Performance drops</p>
+                        <p className="text-gray-600 text-xs mt-1">Missed goals</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="bg-[#0A4D68]/10 p-4 rounded-lg border-l-4 border-[#0A4D68]">
+                    <p className="text-sm md:text-base text-gray-700 text-center font-semibold">
+                      You can't expect your team to behave better than you do.
+                    </p>
+                  </div>
+                </div>
+              )
+            },
+            {
+              title: "Your Action Plan",
+              subtitle: "What changes this week?",
+              icon: Target,
+              content: (
+                <div className="space-y-4 md:space-y-5">
+                  <div className="bg-[#0A4D68]/10 p-4 md:p-5 rounded-lg border-l-4 border-[#3DD598]">
+                    <h3 className="text-base md:text-lg font-semibold text-[#0A4D68] mb-3">This Week's Commitments:</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2">
+                      <div className="flex items-start space-x-2">
+                        <input type="checkbox" className="mt-1 w-4 h-4 accent-[#3DD598] flex-shrink-0" />
+                        <label className="text-gray-700 text-xs md:text-sm">Be on time to every meeting</label>
+                      </div>
+                      <div className="flex items-start space-x-2">
+                        <input type="checkbox" className="mt-1 w-4 h-4 accent-[#3DD598] flex-shrink-0" />
+                        <label className="text-gray-700 text-xs md:text-sm">Respond to calendar invites in 24h</label>
+                      </div>
+                      <div className="flex items-start space-x-2">
+                        <input type="checkbox" className="mt-1 w-4 h-4 accent-[#3DD598] flex-shrink-0" />
+                        <label className="text-gray-700 text-xs md:text-sm">Reply to messages in 30 mins</label>
+                      </div>
+                      <div className="flex items-start space-x-2">
+                        <input type="checkbox" className="mt-1 w-4 h-4 accent-[#3DD598] flex-shrink-0" />
+                        <label className="text-gray-700 text-xs md:text-sm">Turn camera on for meetings</label>
+                      </div>
+                      <div className="flex items-start space-x-2">
+                        <input type="checkbox" className="mt-1 w-4 h-4 accent-[#3DD598] flex-shrink-0" />
+                        <label className="text-gray-700 text-xs md:text-sm">Protect all 1-on-1s</label>
+                      </div>
+                      <div className="flex items-start space-x-2">
+                        <input type="checkbox" className="mt-1 w-4 h-4 accent-[#3DD598] flex-shrink-0" />
+                        <label className="text-gray-700 text-xs md:text-sm">Debug before asking team</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )
+            }
+          );
 
           const nextSlide = () => {
             setCurrentSlide((prev) => (prev + 1) % slides.length);
@@ -470,100 +443,142 @@ const TaazaaLogo = ({ className, style }) => (
           const Icon = currentSlideData.icon;
 
           return (
-            <div className="min-h-screen bg-[#0A4D68] flex items-center justify-center p-4">
+            <div className="min-h-screen bg-[#0A4D68] flex items-center justify-center p-2 md:p-4">
               <div className="w-full max-w-6xl">
                 {/* Header Bar */}
-                <div className="bg-white px-8 py-4 rounded-t-2xl shadow-lg flex items-center justify-between">
-                  <div className="flex items-center space-x-4">
-                    <TaazaaLogo className="w-10 h-10" />
+                <div className="bg-white px-4 md:px-8 py-3 md:py-4 rounded-t-2xl shadow-lg flex items-center justify-between">
+                  <div className="flex items-center space-x-2 md:space-x-4">
+                    <TaazaaLogo style={{ maxWidth: '80px' }} className="hidden md:block" />
+                    <TaazaaLogo style={{ maxWidth: '60px' }} className="md:hidden" />
                     <div>
-                      <h1 className="text-2xl font-bold text-[#0A4D68]"></h1>
-                      <p className="text-sm text-gray-600"></p>
+                      <h1 className="text-base md:text-2xl font-bold text-[#0A4D68]">Leadership Excellence</h1>
+                      <p className="text-xs md:text-sm text-gray-600 hidden md:block"></p>
                     </div>
                   </div>
                   <div className="text-right">
                     <div className="text-xs text-gray-500">Slide</div>
-                    <div className="text-xl font-bold text-[#0A4D68]">{currentSlide + 1}/{slides.length}</div>
+                    <div className="text-lg md:text-xl font-bold text-[#0A4D68]">{currentSlide + 1}/{slides.length}</div>
                   </div>
                 </div>
 
                 {/* Slide Container */}
                 <div className="bg-white shadow-2xl overflow-hidden">
                   {/* Slide Header */}
-                  <div className="bg-gradient-to-r from-[#0A4D68] to-[#0A4D68]/90 text-white p-8 border-b-4 border-[#3DD598]">
-                    <div className="flex items-center space-x-4">
-                      <Icon className="w-10 h-10 text-[#3DD598]" />
+                  <div className="bg-gradient-to-r from-[#0A4D68] to-[#0A4D68]/90 text-white p-4 md:p-8 border-b-4 border-[#3DD598]">
+                    <div className="flex items-center space-x-3 md:space-x-4">
+                      <Icon className="w-6 h-6 md:w-10 md:h-10 text-[#3DD598] flex-shrink-0" />
                       <div>
-                        <h2 className="text-3xl font-bold">{currentSlideData.title}</h2>
-                        <p className="text-gray-200 text-lg mt-1">{currentSlideData.subtitle}</p>
+                        <h2 className="text-xl md:text-3xl font-bold">{currentSlideData.title}</h2>
+                        <p className="text-gray-200 text-sm md:text-lg mt-1">{currentSlideData.subtitle}</p>
                       </div>
                     </div>
                   </div>
 
                   {/* Content */}
-                  <div className="p-10 min-h-[500px] flex items-center bg-white">
-                    {currentSlideData.content}
+                  <div className="p-4 md:p-10 min-h-[400px] md:min-h-[500px] flex items-start bg-white overflow-y-auto" style={{ maxHeight: '60vh' }}>
+                    <div className="w-full">
+                      {currentSlideData.content}
+                    </div>
                   </div>
 
                   {/* Navigation */}
-                  <div className="bg-gray-50 px-8 py-6 flex items-center justify-between border-t-2 border-gray-200">
-                    <button
-                      onClick={prevSlide}
-                      disabled={currentSlide === 0}
-                      className="flex items-center space-x-2 px-6 py-3 bg-[#0A4D68] text-white rounded-lg hover:bg-[#0A4D68]/90 disabled:bg-gray-300 disabled:cursor-not-allowed transition-all shadow-md hover:shadow-lg"
-                    >
-                      <ChevronLeft />
-                      <span className="font-semibold">Previous</span>
-                    </button>
+                  <div className="bg-gray-50 px-3 md:px-8 py-4 md:py-6 border-t-2 border-gray-200">
+                    {/* Mobile Navigation */}
+                    <div className="flex md:hidden items-center justify-between gap-2">
+                      <button
+                        onClick={prevSlide}
+                        disabled={currentSlide === 0}
+                        className="flex items-center justify-center space-x-1 px-3 py-2 bg-[#0A4D68] text-white rounded-lg hover:bg-[#0A4D68]/90 disabled:bg-gray-300 disabled:cursor-not-allowed transition-all shadow-md text-sm flex-shrink-0"
+                      >
+                        <ChevronLeft />
+                        <span className="font-semibold">Prev</span>
+                      </button>
 
-                    {/* Slide Indicators */}
-                    <div className="flex space-x-2">
-                      {slides.map((_, index) => (
-                        <button
-                          key={index}
-                          onClick={() => goToSlide(index)}
-                          className={`h-3 rounded-full transition-all ${
-                            index === currentSlide
-                              ? 'bg-[#3DD598] w-8'
-                              : 'bg-gray-300 hover:bg-gray-400 w-3'
-                          }`}
-                        />
-                      ))}
+                      {/* Slide Indicators */}
+                      <div className="flex space-x-1 overflow-x-auto px-2">
+                        {slides.map((_, index) => (
+                          <button
+                            key={index}
+                            onClick={() => goToSlide(index)}
+                            className={`h-2 rounded-full transition-all flex-shrink-0 ${
+                              index === currentSlide
+                                ? 'bg-[#3DD598] w-6'
+                                : 'bg-gray-300 w-2'
+                            }`}
+                          />
+                        ))}
+                      </div>
+
+                      <button
+                        onClick={nextSlide}
+                        disabled={currentSlide === slides.length - 1}
+                        className="flex items-center justify-center space-x-1 px-3 py-2 bg-[#3DD598] text-white rounded-lg hover:bg-[#3DD598]/90 disabled:bg-gray-300 disabled:cursor-not-allowed transition-all shadow-md text-sm flex-shrink-0"
+                      >
+                        <span className="font-semibold">Next</span>
+                        <ChevronRight />
+                      </button>
                     </div>
 
-                    <button
-                      onClick={nextSlide}
-                      disabled={currentSlide === slides.length - 1}
-                      className="flex items-center space-x-2 px-6 py-3 bg-[#3DD598] text-white rounded-lg hover:bg-[#3DD598]/90 disabled:bg-gray-300 disabled:cursor-not-allowed transition-all shadow-md hover:shadow-lg"
-                    >
-                      <span className="font-semibold">Next</span>
-                      <ChevronRight />
-                    </button>
+                    {/* Desktop Navigation */}
+                    <div className="hidden md:flex items-center justify-between">
+                      <button
+                        onClick={prevSlide}
+                        disabled={currentSlide === 0}
+                        className="flex items-center space-x-2 px-6 py-3 bg-[#0A4D68] text-white rounded-lg hover:bg-[#0A4D68]/90 disabled:bg-gray-300 disabled:cursor-not-allowed transition-all shadow-md hover:shadow-lg"
+                      >
+                        <ChevronLeft />
+                        <span className="font-semibold">Previous</span>
+                      </button>
+
+                      {/* Slide Indicators */}
+                      <div className="flex space-x-2">
+                        {slides.map((_, index) => (
+                          <button
+                            key={index}
+                            onClick={() => goToSlide(index)}
+                            className={`h-3 rounded-full transition-all ${
+                              index === currentSlide
+                                ? 'bg-[#3DD598] w-8'
+                                : 'bg-gray-300 hover:bg-gray-400 w-3'
+                            }`}
+                          />
+                        ))}
+                      </div>
+
+                      <button
+                        onClick={nextSlide}
+                        disabled={currentSlide === slides.length - 1}
+                        className="flex items-center space-x-2 px-6 py-3 bg-[#3DD598] text-white rounded-lg hover:bg-[#3DD598]/90 disabled:bg-gray-300 disabled:cursor-not-allowed transition-all shadow-md hover:shadow-lg"
+                      >
+                        <span className="font-semibold">Next</span>
+                        <ChevronRight />
+                      </button>
+                    </div>
                   </div>
                 </div>
 
-                {/* Quick Jump Navigation */}
-                <div className="mt-6 bg-white/10 backdrop-blur-sm rounded-lg p-4 shadow-lg">
+                {/* Quick Jump Navigation - Desktop Only */}
+                <div className="mt-4 md:mt-6 bg-white/10 backdrop-blur-sm rounded-lg p-3 md:p-4 shadow-lg hidden md:block">
                   <div className="grid grid-cols-4 md:grid-cols-6 gap-2">
                     {slides.map((slide, index) => (
                       <button
                         key={index}
                         onClick={() => goToSlide(index)}
-                        className={`px-3 py-2 rounded text-sm font-medium transition-all ${
+                        className={`px-2 md:px-3 py-2 rounded text-xs md:text-sm font-medium transition-all ${
                           index === currentSlide
                             ? 'bg-[#3DD598] text-[#0A4D68] shadow-lg'
                             : 'bg-white/90 text-[#0A4D68] hover:bg-[#3DD598]/20'
                         }`}
                       >
-                        {index + 1}. {slide.title.split(':')[0].substring(0, 15)}
+                        {index + 1}. {slide.title.split(':')[0].substring(0, 12)}
                       </button>
                     ))}
                   </div>
                 </div>
 
                 {/* Footer */}
-                <div className="mt-4 text-center">
-                  <p className="text-white/80 text-sm">© 2025 Taazaa Inc. All rights reserved.</p>
+                <div className="mt-3 md:mt-4 text-center">
+                  <p className="text-white/80 text-xs md:text-sm">© 2025 Taazaa Inc. All rights reserved.</p>
                 </div>
               </div>
             </div>
