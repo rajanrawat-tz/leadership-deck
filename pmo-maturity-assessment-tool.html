@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PMO Maturity Assessment</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #181b24;
+    --surface-raised: #1e2231;
+    --border: #2a2e3b;
+    --border-hover: #3a3f52;
+    --text-primary: #e8eaf0;
+    --text-secondary: #8b90a0;
+    --text-muted: #5c6070;
+    --accent: #6c9eff;
+    --accent-dim: rgba(108, 158, 255, 0.10);
+    --accent-border: rgba(108, 158, 255, 0.30);
+    --level1: #ff6b6b;
+    --level1-dim: rgba(255, 107, 107, 0.10);
+    --level1-border: rgba(255, 107, 107, 0.35);
+    --level2: #ffa940;
+    --level2-dim: rgba(255, 169, 64, 0.10);
+    --level2-border: rgba(255, 169, 64, 0.35);
+    --level3: #6c9eff;
+    --level3-dim: rgba(108, 158, 255, 0.10);
+    --level3-border: rgba(108, 158, 255, 0.35);
+    --level4: #52d6a0;
+    --level4-dim: rgba(82, 214, 160, 0.10);
+    --level4-border: rgba(82, 214, 160, 0.35);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text-primary);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 17px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  .container {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 2.5rem 2rem;
+  }
+
+  /* ── Intro Screen ── */
+  #intro { text-align: center; padding-top: 6rem; }
+  #intro h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2.8rem;
+    font-weight: 400;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+  }
+  #intro p {
+    color: var(--text-secondary);
+    font-size: 1.05rem;
+    max-width: 560px;
+    margin: 0 auto 1.5rem;
+  }
+
+  .level-legend {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    max-width: 600px;
+    margin: 2.5rem auto;
+    text-align: left;
+  }
+  .level-legend-item {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    font-size: 0.88rem;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+  }
+  .level-legend-item .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    position: relative;
+    top: 1px;
+  }
+  .level-legend-item .lbl { font-weight: 600; }
+  .level-legend-item .desc { color: var(--text-secondary); }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.85rem 2rem;
+    border-radius: 8px;
+    border: 1px solid var(--accent-border);
+    background: var(--accent-dim);
+    color: var(--accent);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn:hover { background: rgba(108, 158, 255, 0.18); }
+  .btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+  .btn-secondary {
+    background: transparent;
+    border-color: var(--border);
+    color: var(--text-secondary);
+  }
+  .btn-secondary:hover {
+    border-color: var(--border-hover);
+    color: var(--text-primary);
+    background: var(--surface);
+  }
+
+  /* ── Question Screen ── */
+  #assessment { display: none; }
+
+  .progress-bar {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+  }
+  .progress-track {
+    flex: 1;
+    height: 4px;
+    background: var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 4px;
+    transition: width 0.4s ease;
+  }
+  .progress-label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    white-space: nowrap;
+    font-weight: 500;
+  }
+
+  .q-dimension {
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+  }
+  .q-text {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.7rem;
+    font-weight: 400;
+    line-height: 1.35;
+    margin-bottom: 2rem;
+  }
+
+  .options { display: grid; gap: 0.65rem; }
+  .option {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1.1rem 1.3rem;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .option:hover { border-color: var(--border-hover); background: var(--surface-raised); }
+
+  .option.selected-1 { border-color: var(--level1-border); background: var(--level1-dim); }
+  .option.selected-2 { border-color: var(--level2-border); background: var(--level2-dim); }
+  .option.selected-3 { border-color: var(--level3-border); background: var(--level3-dim); }
+  .option.selected-4 { border-color: var(--level4-border); background: var(--level4-dim); }
+
+  .option-level {
+    flex-shrink: 0;
+    width: 36px;
+    height: 24px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    position: relative;
+    top: 2px;
+  }
+  .ol-1 { background: var(--level1-dim); color: var(--level1); border: 1px solid var(--level1-border); }
+  .ol-2 { background: var(--level2-dim); color: var(--level2); border: 1px solid var(--level2-border); }
+  .ol-3 { background: var(--level3-dim); color: var(--level3); border: 1px solid var(--level3-border); }
+  .ol-4 { background: var(--level4-dim); color: var(--level4); border: 1px solid var(--level4-border); }
+
+  .option-text { font-size: 0.92rem; color: var(--text-primary); }
+
+  .nav-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 2.5rem;
+  }
+
+  /* ── Results Screen ── */
+  #results { display: none; }
+
+  .results-header {
+    text-align: center;
+    margin-bottom: 3rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .results-header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2.4rem;
+    font-weight: 400;
+    margin-bottom: 0.5rem;
+  }
+
+  .overall-result {
+    display: flex;
+    align-items: center;
+    gap: 2.5rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 2.5rem;
+    margin-bottom: 2.5rem;
+  }
+  .score-ring {
+    flex-shrink: 0;
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-width: 4px;
+    border-style: solid;
+  }
+  .score-ring .num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2.6rem;
+    line-height: 1;
+  }
+  .score-ring .of {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+  }
+  .overall-desc h2 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+  }
+  .overall-desc p {
+    color: var(--text-secondary);
+    font-size: 0.92rem;
+    max-width: 500px;
+  }
+
+  .r-section-header {
+    margin-top: 2.5rem;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .r-section-header h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.45rem;
+    font-weight: 400;
+  }
+  .r-section-header p {
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    margin-top: 0.2rem;
+  }
+
+  /* Dimension result rows */
+  .dim-results { display: grid; gap: 0.6rem; }
+  .dim-row {
+    display: grid;
+    grid-template-columns: 200px 1fr 60px;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.9rem 1.2rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+  .dim-row-name {
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+  .dim-row-bar {
+    height: 8px;
+    background: var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .dim-row-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.6s ease;
+  }
+  .dim-row-score {
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-align: right;
+  }
+
+  .dim-row-answer {
+    grid-column: 1 / -1;
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    padding-left: 0.5rem;
+    border-left: 2px solid var(--border);
+    margin-top: -0.25rem;
+  }
+
+  /* Insight cards */
+  .insights { display: grid; gap: 1rem; }
+  .insight-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.75rem;
+    border-left: 3px solid var(--level2);
+  }
+  .insight-label {
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--level2);
+    margin-bottom: 0.4rem;
+  }
+  .insight-title {
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+  }
+  .insight-body {
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+    line-height: 1.55;
+  }
+  .insight-evidence {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-top: 0.6rem;
+    font-style: italic;
+  }
+
+  .insight-card.severity-high { border-left-color: var(--level1); }
+  .insight-card.severity-high .insight-label { color: var(--level1); }
+  .insight-card.severity-medium { border-left-color: var(--level2); }
+  .insight-card.severity-medium .insight-label { color: var(--level2); }
+
+  /* Takeaway */
+  .takeaway {
+    margin-top: 2.5rem;
+    padding: 2.25rem;
+    background: var(--accent-dim);
+    border: 1px solid var(--accent-border);
+    border-radius: 12px;
+    text-align: center;
+  }
+  .takeaway p {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.2rem;
+    line-height: 1.5;
+    max-width: 650px;
+    margin: 0 auto;
+  }
+  .takeaway .sub {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    margin-top: 0.6rem;
+  }
+
+  .restart-row {
+    text-align: center;
+    margin-top: 2rem;
+  }
+
+  .footer {
+    margin-top: 3rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--border);
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    display: flex;
+    justify-content: space-between;
+  }
+
+  @media (max-width: 768px) {
+    .container { padding: 1.5rem 1rem; }
+    #intro h1 { font-size: 2rem; }
+    #intro { padding-top: 3rem; }
+    .q-text { font-size: 1.3rem; }
+    .level-legend { grid-template-columns: 1fr; }
+    .overall-result { flex-direction: column; text-align: center; gap: 1.5rem; }
+    .dim-row { grid-template-columns: 1fr 60px; }
+    .dim-row-name { grid-column: 1 / -1; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- ══════ INTRO ══════ -->
+<div id="intro">
+  <h1>Delivery Maturity Assessment</h1>
+  <p>12 questions across core delivery dimensions. Each answer maps to a maturity level. The tool scores automatically and surfaces patterns.</p>
+
+  <div class="level-legend">
+    <div class="level-legend-item">
+      <div class="dot" style="background: var(--level1);"></div>
+      <div><span class="lbl">Level 1 — Ad Hoc</span><br><span class="desc">No defined approach. Entirely dependent on individuals.</span></div>
+    </div>
+    <div class="level-legend-item">
+      <div class="dot" style="background: var(--level2);"></div>
+      <div><span class="lbl">Level 2 — Developing</span><br><span class="desc">Process exists but inconsistently applied. Still person-dependent.</span></div>
+    </div>
+    <div class="level-legend-item">
+      <div class="dot" style="background: var(--level3);"></div>
+      <div><span class="lbl">Level 3 — Defined</span><br><span class="desc">Standardized and consistently followed. Structurally enforced.</span></div>
+    </div>
+    <div class="level-legend-item">
+      <div class="dot" style="background: var(--level4);"></div>
+      <div><span class="lbl">Level 4 — Optimized</span><br><span class="desc">Data-driven, continuously improving, system-dependent.</span></div>
+    </div>
+  </div>
+
+  <button class="btn" onclick="startAssessment()">Begin Assessment →</button>
+</div>
+
+<!-- ══════ ASSESSMENT ══════ -->
+<div id="assessment">
+  <div class="progress-bar">
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="progress-label" id="progressLabel"></div>
+  </div>
+
+  <div class="q-dimension" id="qDimension"></div>
+  <div class="q-text" id="qText"></div>
+  <div class="options" id="optionsContainer"></div>
+
+  <div class="nav-row">
+    <button class="btn btn-secondary" id="prevBtn" onclick="prevQuestion()">← Back</button>
+    <button class="btn" id="nextBtn" onclick="nextQuestion()" disabled>Next →</button>
+  </div>
+</div>
+
+<!-- ══════ RESULTS ══════ -->
+<div id="results">
+  <div class="results-header">
+    <h1>Assessment Results</h1>
+  </div>
+
+  <div class="overall-result" id="overallResult"></div>
+
+  <div class="r-section-header">
+    <h2>Dimension Scores</h2>
+    <p>Each score reflects the maturity level selected — with the question and answer shown</p>
+  </div>
+  <div class="dim-results" id="dimResults"></div>
+
+  <div class="r-section-header">
+    <h2>What the Scores Tell Us</h2>
+    <p>Pattern-based diagnostics — generated from score clusters, not individual answers</p>
+  </div>
+  <div class="insights" id="insightsContainer"></div>
+
+  <div id="takeawayContainer"></div>
+
+  <div class="restart-row">
+    <button class="btn btn-secondary" onclick="restart()">↻ Retake Assessment</button>
+  </div>
+
+  <div class="footer">
+    <span>PMO Delivery Maturity Assessment</span>
+    <span>Self-assessment baseline tool</span>
+  </div>
+</div>
+
+</div>
+
+<script>
+const questions = [
+  {
+    id: 'process',
+    dimension: 'Process Standardization',
+    question: 'How standardized is the delivery process across projects and products?',
+    options: [
+      'Every PM does their own thing — no common approach',
+      'Some common practices exist but they are not enforced',
+      'Documented standards that are mostly followed across teams',
+      'Tight, consistent process with reliable execution everywhere'
+    ]
+  },
+  {
+    id: 'escalation',
+    dimension: 'Escalation & Decision-Making',
+    question: 'When something goes wrong on a project, how does escalation work?',
+    options: [
+      'Depends entirely on the PM — no clear path exists',
+      'There\'s a process but it\'s used inconsistently',
+      'Defined escalation path that most people follow',
+      'Clear escalation path that is consistently followed and drives decisions'
+    ]
+  },
+  {
+    id: 'visibility',
+    dimension: 'Portfolio Visibility',
+    question: 'How is project health tracked across the portfolio?',
+    options: [
+      'Individual PM updates with no unified view',
+      'Shared tooling in place but adoption is inconsistent',
+      'Unified tracking tool with consistent usage across teams',
+      'Single dashboard with real-time data that leadership actively uses'
+    ]
+  },
+  {
+    id: 'resources',
+    dimension: 'Resource Management',
+    question: 'How is resource allocation decided across projects?',
+    options: [
+      'Whoever asks first or loudest gets people',
+      'Director or leadership makes calls ad hoc — no systematic process',
+      'Capacity planning process exists and is followed for most decisions',
+      'Systematic capacity planning with full visibility into utilization and forecasting'
+    ]
+  },
+  {
+    id: 'early_warning',
+    dimension: 'Early Warning & Risk Detection',
+    question: 'When a project is underperforming, how quickly does leadership find out?',
+    options: [
+      'Usually when it\'s already a fire',
+      'Depends on the PM — some flag early, some don\'t',
+      'Regular reviews reliably catch it within a sprint or two',
+      'Real-time visibility — leadership sees leading indicators as they emerge'
+    ]
+  },
+  {
+    id: 'ownership',
+    dimension: 'Outcome Ownership',
+    question: 'How clear is ownership of delivery outcomes — not tasks, but outcomes?',
+    options: [
+      'Nobody really owns the outcome end-to-end',
+      'PM owns it but doesn\'t have the authority to enforce it',
+      'Clear ownership with some authority, but it overlaps with other roles',
+      'Single owner with real decision-making authority on scope, resources, and trade-offs'
+    ]
+  },
+  {
+    id: 'governance',
+    dimension: 'Governance',
+    question: 'Do governance checkpoints (stage gates, milestone reviews) actually influence decisions?',
+    options: [
+      'No formal reviews — projects run until they end',
+      'Milestone reviews happen but they\'re status updates, not decision gates',
+      'Stage gates exist and occasionally drive real go/no-go decisions',
+      'Governance checkpoints consistently trigger adjustments, course corrections, or stops'
+    ]
+  },
+  {
+    id: 'metrics',
+    dimension: 'Metrics & Data',
+    question: 'How mature is the use of delivery metrics?',
+    options: [
+      'We track hours and maybe velocity — that\'s about it',
+      'Metrics exist but nobody consistently looks at them',
+      'Regular reviews of delivery metrics with some actions taken as a result',
+      'Metrics actively drive decisions on staffing, scope, and priorities'
+    ]
+  },
+  {
+    id: 'learning',
+    dimension: 'Learning & Improvement',
+    question: 'How does learning from past projects feed back into the organization?',
+    options: [
+      'No structured retrospectives or post-mortems',
+      'Retros happen but follow-through is weak',
+      'Retros happen and sometimes produce real process changes',
+      'Continuous improvement loop — retros reliably drive systemic changes'
+    ]
+  },
+  {
+    id: 'pm_capability',
+    dimension: 'PM Capability Consistency',
+    question: 'How consistent is PM capability across the team?',
+    options: [
+      'Wide variance — a few strong PMs carry the organization',
+      'Generally competent but with significant skill gaps in specific areas',
+      'Mostly consistent capability with occasional weak spots',
+      'Strong bench — any PM can run any project to a reliable standard'
+    ]
+  },
+  {
+    id: 'cross_project',
+    dimension: 'Cross-Project Coordination',
+    question: 'How are cross-project dependencies handled?',
+    options: [
+      'Each project is its own island',
+      'People informally coordinate when they notice overlap',
+      'Some visibility into dependencies but nobody owns resolution',
+      'Active dependency management with a dedicated owner and regular reviews'
+    ]
+  },
+  {
+    id: 'ai_adoption',
+    dimension: 'AI & Automation Adoption',
+    question: 'How much has AI and automation been adopted in delivery workflows?',
+    options: [
+      'Barely — still mostly manual everything',
+      'Org-wide adoption is underway but coverage is not expanding as expected',
+      'Specific use cases adopted and delivering value (reporting, docs, etc.)',
+      'Embedded in workflows — AI and automation are part of how we operate'
+    ]
+  }
+];
+
+// ── Insight generation rules ──
+const insightRules = [
+  {
+    id: 'authority_gap',
+    label: 'Structural Finding',
+    severity: 'high',
+    title: 'Responsibility without authority',
+    check: (s) => s.ownership <= 2 && s.resources <= 2,
+    body: 'PMs carry responsibility for delivery outcomes but lack the structural authority to enforce them. Resource decisions are made ad hoc at the leadership level, meaning PMs can\'t make the trade-offs needed to protect their own commitments. A RACI where the "A" doesn\'t come with real decision-making power doesn\'t change behavior.',
+    evidence: (s) => `Outcome Ownership: Level ${s.ownership} · Resource Management: Level ${s.resources}`
+  },
+  {
+    id: 'person_dependent',
+    label: 'Scaling Risk',
+    severity: 'high',
+    title: 'Delivery quality is person-dependent, not system-dependent',
+    check: (s) => s.pm_capability <= 2 && s.process <= 2,
+    body: 'A few strong PMs carry the org while processes exist but aren\'t enforced. This isn\'t a scalable model — it\'s key-person dependency. Delivery quality depends on which PM is assigned, not on organizational systems. This works at 5 projects. It breaks at 15.',
+    evidence: (s) => `PM Capability: Level ${s.pm_capability} · Process Standardization: Level ${s.process}`
+  },
+  {
+    id: 'no_feedback_loop',
+    label: 'Systemic Gap',
+    severity: 'medium',
+    title: 'No functioning feedback loop',
+    check: (s) => s.metrics <= 2 && s.governance <= 2 && s.learning <= 2,
+    body: 'Metrics are collected but not consumed. Reviews happen but don\'t trigger decisions. Retros occur but don\'t reliably change anything. The three mechanisms that should create organizational learning — measurement, governance, and retrospection — are all present but disconnected from action.',
+    evidence: (s) => `Metrics: Level ${s.metrics} · Governance: Level ${s.governance} · Learning: Level ${s.learning}`
+  },
+  {
+    id: 'coordination_void',
+    label: 'Structural Finding',
+    severity: 'high',
+    title: 'Nobody owns the space between projects',
+    check: (s) => s.cross_project <= 2 && s.resources <= 2,
+    body: 'Cross-project dependencies are handled informally and resource allocation is ad hoc. Nobody structurally owns what happens between projects — the conflicts, shared resources, and competing priorities. This is where fires start, and there\'s no one whose job it is to prevent them.',
+    evidence: (s) => `Cross-Project Coordination: Level ${s.cross_project} · Resource Management: Level ${s.resources}`
+  },
+  {
+    id: 'visibility_gap',
+    label: 'Operational Risk',
+    severity: 'medium',
+    title: 'Leadership visibility depends on individual PM behavior',
+    check: (s) => s.visibility <= 2 && s.early_warning <= 2,
+    body: 'Portfolio tracking tools exist but are used inconsistently, and early warning of underperformance depends on whether the PM flags it. Leadership has no structural safety net — no system that surfaces problems independently of individual PM diligence.',
+    evidence: (s) => `Portfolio Visibility: Level ${s.visibility} · Early Warning: Level ${s.early_warning}`
+  },
+  {
+    id: 'governance_theater',
+    label: 'Process Gap',
+    severity: 'medium',
+    title: 'Governance exists but doesn\'t govern',
+    check: (s) => s.governance <= 2 && s.ownership <= 2,
+    body: 'Milestone reviews happen but they\'re informational, not decisional. Combined with weak outcome ownership, there\'s no point in the delivery lifecycle where someone with authority asks "should we continue, adjust, or stop?" Reviews become status theater — everyone nods, nothing changes.',
+    evidence: (s) => `Governance: Level ${s.governance} · Outcome Ownership: Level ${s.ownership}`
+  },
+  {
+    id: 'ai_stall',
+    label: 'Adoption Gap',
+    severity: 'medium',
+    title: 'AI adoption initiated but not landing',
+    check: (s) => s.ai_adoption <= 2,
+    body: 'AI and automation adoption has organizational intent behind it, but coverage isn\'t expanding as expected. This often happens when adoption is treated as a tooling initiative rather than a workflow redesign. The tools are available but the processes haven\'t been restructured to integrate them.',
+    evidence: (s) => `AI & Automation: Level ${s.ai_adoption}`
+  },
+  {
+    id: 'inconsistency_root',
+    label: 'Root Cause',
+    severity: 'medium',
+    title: 'Delivery inconsistency is a symptom, not the disease',
+    check: (s) => s.process <= 2 && s.metrics <= 2 && s.learning <= 2,
+    body: 'Processes exist but aren\'t enforced. Metrics exist but aren\'t reviewed. Retros happen but don\'t reliably change things. Inconsistency across projects isn\'t because people don\'t care — it\'s because there\'s no enforceable baseline. The system doesn\'t create consistency; individual PMs either bring it or they don\'t.',
+    evidence: (s) => `Process: Level ${s.process} · Metrics: Level ${s.metrics} · Learning: Level ${s.learning}`
+  }
+];
+
+let currentQ = 0;
+let answers = {};
+
+function startAssessment() {
+  document.getElementById('intro').style.display = 'none';
+  document.getElementById('assessment').style.display = 'block';
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = questions[currentQ];
+  document.getElementById('qDimension').textContent = q.dimension;
+  document.getElementById('qText').textContent = q.question;
+  document.getElementById('progressLabel').textContent = `${currentQ + 1} of ${questions.length}`;
+  document.getElementById('progressFill').style.width = `${((currentQ + 1) / questions.length) * 100}%`;
+
+  const container = document.getElementById('optionsContainer');
+  container.innerHTML = '';
+
+  q.options.forEach((opt, i) => {
+    const level = i + 1;
+    const levelLabels = ['L1', 'L2', 'L3', 'L4'];
+    const div = document.createElement('div');
+    div.className = 'option' + (answers[q.id] === level ? ` selected-${level}` : '');
+    div.innerHTML = `
+      <div class="option-level ol-${level}">${levelLabels[i]}</div>
+      <div class="option-text">${opt}</div>
+    `;
+    div.onclick = () => selectOption(q.id, level);
+    container.appendChild(div);
+  });
+
+  document.getElementById('prevBtn').disabled = currentQ === 0;
+  document.getElementById('prevBtn').style.visibility = currentQ === 0 ? 'hidden' : 'visible';
+
+  const isLast = currentQ === questions.length - 1;
+  const nextBtn = document.getElementById('nextBtn');
+  nextBtn.textContent = isLast ? 'See Results →' : 'Next →';
+  nextBtn.disabled = !answers[questions[currentQ].id];
+}
+
+function selectOption(qId, level) {
+  answers[qId] = level;
+  renderQuestion();
+}
+
+function nextQuestion() {
+  if (!answers[questions[currentQ].id]) return;
+  if (currentQ < questions.length - 1) {
+    currentQ++;
+    renderQuestion();
+  } else {
+    showResults();
+  }
+}
+
+function prevQuestion() {
+  if (currentQ > 0) {
+    currentQ--;
+    renderQuestion();
+  }
+}
+
+function getScores() {
+  const s = {};
+  questions.forEach(q => { s[q.id] = answers[q.id] || 0; });
+  return s;
+}
+
+function getAverage(scores) {
+  const vals = Object.values(scores);
+  return vals.reduce((a, b) => a + b, 0) / vals.length;
+}
+
+function getLevelInfo(avg) {
+  if (avg < 1.5) return {
+    level: 1, label: 'Ad Hoc', color: 'var(--level1)',
+    desc: 'No defined approach across most dimensions. Delivery is reactive and entirely dependent on individual capability. The organization lacks the structural foundations needed before a PMO model can be meaningfully applied.'
+  };
+  if (avg < 2.5) return {
+    level: 2, label: 'Developing', color: 'var(--level2)',
+    desc: 'Processes, tools, and intent exist across most dimensions — but enforcement and consistency are missing. Delivery quality depends on which PM is running the project, not on organizational systems.'
+  };
+  if (avg < 3.5) return {
+    level: 3, label: 'Defined', color: 'var(--level3)',
+    desc: 'Standardized processes are in place and consistently followed. The organization has structural enforcement — delivery quality is becoming system-dependent rather than person-dependent.'
+  };
+  return {
+    level: 4, label: 'Optimized', color: 'var(--level4)',
+    desc: 'Data-driven and continuously improving. Delivery is system-dependent with self-correcting feedback loops. The organization can scale confidently and predict outcomes reliably.'
+  };
+}
+
+function getScoreColor(val) {
+  if (val <= 1.5) return 'var(--level1)';
+  if (val <= 2.5) return 'var(--level2)';
+  if (val <= 3.5) return 'var(--level3)';
+  return 'var(--level4)';
+}
+
+function getTakeaway(avg, insights) {
+  if (avg < 2.0) {
+    return {
+      main: 'The restructure should solve for one thing: making delivery outcomes system-dependent instead of person-dependent.',
+      sub: 'Whatever model is chosen — if it doesn\'t create structural consistency independent of who\'s running the project, it will rearrange boxes without changing results.'
+    };
+  }
+  if (avg < 2.5) {
+    return {
+      main: 'The foundations exist. The gap is enforcement and authority — not process design.',
+      sub: 'The restructure should focus on empowering the processes and systems already in place, not adding new layers on top of what isn\'t being used.'
+    };
+  }
+  if (avg < 3.5) {
+    return {
+      main: 'The organization has structural maturity. The restructure should target specific weak dimensions rather than broad redesign.',
+      sub: 'Focus investment on the lowest-scoring areas — the system is strong enough that targeted improvements will compound.'
+    };
+  }
+  return {
+    main: 'High maturity across the board. The restructure should focus on optimization and scaling what works.',
+    sub: 'The risk at this stage is over-engineering. Protect what\'s working while addressing any remaining gaps.'
+  };
+}
+
+function showResults() {
+  document.getElementById('assessment').style.display = 'none';
+  document.getElementById('results').style.display = 'block';
+
+  const scores = getScores();
+  const avg = getAverage(scores);
+  const info = getLevelInfo(avg);
+
+  // Overall result
+  document.getElementById('overallResult').innerHTML = `
+    <div class="score-ring" style="border-color: ${info.color};">
+      <div class="num" style="color: ${info.color};">${avg.toFixed(1)}</div>
+      <div class="of">of 4.0</div>
+    </div>
+    <div class="overall-desc">
+      <h2>Level ${info.level} — <span style="color: ${info.color};">"${info.label}"</span></h2>
+      <p>${info.desc}</p>
+    </div>
+  `;
+
+  // Dimension scores
+  const dimContainer = document.getElementById('dimResults');
+  dimContainer.innerHTML = '';
+  questions.forEach(q => {
+    const score = scores[q.id];
+    const color = getScoreColor(score);
+    const selectedAnswer = q.options[score - 1];
+    const div = document.createElement('div');
+    div.className = 'dim-row';
+    div.innerHTML = `
+      <div class="dim-row-name">${q.dimension}</div>
+      <div class="dim-row-bar"><div class="dim-row-fill" style="width: ${(score / 4) * 100}%; background: ${color};"></div></div>
+      <div class="dim-row-score" style="color: ${color};">${score} / 4</div>
+      <div class="dim-row-answer">${selectedAnswer}</div>
+    `;
+    dimContainer.appendChild(div);
+  });
+
+  // Generate insights
+  const triggeredInsights = insightRules.filter(rule => rule.check(scores));
+  const insightsEl = document.getElementById('insightsContainer');
+  insightsEl.innerHTML = '';
+
+  if (triggeredInsights.length === 0) {
+    insightsEl.innerHTML = '<p style="color: var(--text-secondary); padding: 1rem;">No critical patterns detected — scores are balanced across dimensions.</p>';
+  } else {
+    triggeredInsights.forEach(insight => {
+      const div = document.createElement('div');
+      div.className = `insight-card severity-${insight.severity}`;
+      div.innerHTML = `
+        <div class="insight-label">${insight.label}</div>
+        <div class="insight-title">${insight.title}</div>
+        <div class="insight-body">${insight.body}</div>
+        <div class="insight-evidence">Evidence: ${insight.evidence(scores)}</div>
+      `;
+      insightsEl.appendChild(div);
+    });
+  }
+
+  // Takeaway
+  const takeaway = getTakeaway(avg, triggeredInsights);
+  document.getElementById('takeawayContainer').innerHTML = `
+    <div class="takeaway">
+      <p>${takeaway.main}</p>
+      <div class="sub">${takeaway.sub}</div>
+    </div>
+  `;
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function restart() {
+  answers = {};
+  currentQ = 0;
+  document.getElementById('results').style.display = 'none';
+  document.getElementById('intro').style.display = 'block';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
