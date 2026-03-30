@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Delivery Maturity Assessment — Taazaa</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:#0c1629; --navy-mid:#111d35; --navy-light:#162240;
+    --teal:#1ecb91; --teal-light:#3edda6; --teal-dim:rgba(30,203,145,0.06); --teal-border:rgba(30,203,145,0.15);
+    --white:#ffffff; --gray-50:#f7f8fa; --gray-100:#eef0f4; --gray-200:#d5d9e2; --gray-400:#8892a8; --gray-500:#6b7490;
+    --level1:#ef5350; --level1-dim:rgba(239,83,80,0.08); --level1-border:rgba(239,83,80,0.28);
+    --level2:#ffa726; --level2-dim:rgba(255,167,38,0.08); --level2-border:rgba(255,167,38,0.28);
+    --level3:#1ecb91; --level3-dim:rgba(30,203,145,0.08); --level3-border:rgba(30,203,145,0.28);
+    --level4:#42a5f5; --level4-dim:rgba(66,165,245,0.08); --level4-border:rgba(66,165,245,0.28);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--white);color:var(--navy);font-family:'Plus Jakarta Sans',-apple-system,sans-serif;font-size:16px;line-height:1.6;min-height:100vh;}
+  .topbar{background:var(--navy);padding:0.9rem 2rem;display:flex;align-items:center;justify-content:space-between;}
+  .topbar-logo{font-size:1.1rem;font-weight:800;color:var(--white);letter-spacing:-0.02em;}
+  .topbar-tag{font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--teal);font-weight:700;}
+  .container{max-width:840px;margin:0 auto;padding:2.5rem 2rem;}
+  .hero{background:var(--navy);padding:3.5rem 2rem 3rem;text-align:center;position:relative;overflow:hidden;}
+  .hero::before{content:'';position:absolute;top:-50%;right:-20%;width:500px;height:500px;background:radial-gradient(circle,rgba(30,203,145,0.07) 0%,transparent 70%);pointer-events:none;}
+  .hero h1{font-size:2.5rem;font-weight:800;line-height:1.15;margin-bottom:0.8rem;letter-spacing:-0.02em;color:var(--white);max-width:620px;margin-left:auto;margin-right:auto;}
+  .hero h1 span{color:var(--teal);}
+  .hero p{color:var(--gray-400);font-size:0.95rem;max-width:520px;margin:0 auto 2rem;}
+  .level-legend{display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;max-width:580px;margin:2rem auto;text-align:left;}
+  .level-legend-item{display:flex;align-items:baseline;gap:0.5rem;font-size:0.8rem;padding:0.6rem 0.8rem;border-radius:8px;background:var(--navy-mid);border:1px solid var(--navy-light);color:var(--white);}
+  .level-legend-item .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;position:relative;top:2px;}
+  .level-legend-item .lbl{font-weight:700;font-size:0.78rem;}
+  .level-legend-item .desc{color:var(--gray-400);font-size:0.76rem;}
+  .btn{display:inline-flex;align-items:center;gap:0.5rem;padding:0.85rem 2.2rem;border-radius:6px;border:none;background:var(--teal);color:var(--navy);font-family:'Plus Jakarta Sans',sans-serif;font-size:0.88rem;font-weight:700;cursor:pointer;transition:all 0.2s;}
+  .btn:hover{background:var(--teal-light);transform:translateY(-1px);}
+  .btn:disabled{opacity:0.3;cursor:not-allowed;transform:none;}
+  .btn-secondary{background:transparent;border:1px solid var(--gray-200);color:var(--gray-500);}
+  .btn-secondary:hover{border-color:var(--gray-400);color:var(--navy);background:var(--gray-50);transform:none;}
+
+  /* Assessment */
+  #assessment{display:none;}
+  .progress-bar{display:flex;align-items:center;gap:1rem;margin-bottom:2.5rem;}
+  .progress-track{flex:1;height:3px;background:var(--gray-100);border-radius:4px;overflow:hidden;}
+  .progress-fill{height:100%;background:var(--teal);border-radius:4px;transition:width 0.4s ease;}
+  .progress-label{font-size:0.78rem;color:var(--gray-500);white-space:nowrap;font-weight:600;font-variant-numeric:tabular-nums;}
+  .q-dimension{font-size:0.72rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--teal);margin-bottom:0.5rem;font-weight:700;}
+  .q-text{font-size:1.55rem;font-weight:800;line-height:1.3;margin-bottom:2rem;letter-spacing:-0.01em;color:var(--navy);}
+  .options{display:grid;gap:0.5rem;}
+  .option{display:flex;align-items:flex-start;gap:0.85rem;padding:1rem 1.15rem;border-radius:8px;border:1px solid var(--gray-200);background:var(--white);cursor:pointer;transition:all 0.15s;}
+  .option:hover{border-color:var(--gray-400);background:var(--gray-50);}
+  .option.selected-1{border-color:var(--level1-border);background:var(--level1-dim);}
+  .option.selected-2{border-color:var(--level2-border);background:var(--level2-dim);}
+  .option.selected-3{border-color:var(--level3-border);background:var(--level3-dim);}
+  .option.selected-4{border-color:var(--level4-border);background:var(--level4-dim);}
+  .option-level{flex-shrink:0;width:32px;height:22px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:0.62rem;font-weight:800;letter-spacing:0.05em;position:relative;top:2px;}
+  .ol-1{background:var(--level1-dim);color:var(--level1);border:1px solid var(--level1-border);}
+  .ol-2{background:var(--level2-dim);color:var(--level2);border:1px solid var(--level2-border);}
+  .ol-3{background:var(--level3-dim);color:var(--level3);border:1px solid var(--level3-border);}
+  .ol-4{background:var(--level4-dim);color:var(--level4);border:1px solid var(--level4-border);}
+  .option-text{font-size:0.88rem;color:var(--navy);line-height:1.45;}
+  .nav-row{display:flex;justify-content:space-between;align-items:center;margin-top:2.5rem;}
+
+  /* Results */
+  #results{display:none;}
+  .results-hero{background:var(--navy);padding:2.5rem 2rem;text-align:center;position:relative;}
+  .results-hero::before{content:'';position:absolute;top:-30%;left:50%;transform:translateX(-50%);width:400px;height:400px;background:radial-gradient(circle,rgba(30,203,145,0.06) 0%,transparent 70%);pointer-events:none;}
+  .results-hero h1{font-size:1.8rem;font-weight:800;letter-spacing:-0.02em;color:var(--white);margin-bottom:1.25rem;}
+  .overall-result{display:flex;align-items:center;gap:2rem;background:var(--navy-mid);border:1px solid var(--navy-light);border-radius:10px;padding:1.75rem;max-width:680px;margin:0 auto;text-align:left;}
+  .score-ring{flex-shrink:0;width:90px;height:90px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;border-width:3px;border-style:solid;}
+  .score-ring .num{font-size:2rem;font-weight:800;line-height:1;color:var(--white);}
+  .score-ring .of{font-size:0.68rem;color:var(--gray-400);font-weight:600;}
+  .overall-desc h2{font-size:1.1rem;font-weight:700;color:var(--white);margin-bottom:0.3rem;}
+  .overall-desc p{color:var(--gray-400);font-size:0.82rem;line-height:1.5;}
+
+  .r-section-header{margin-top:2.25rem;margin-bottom:1rem;padding-bottom:0.5rem;border-bottom:1px solid var(--gray-100);}
+  .r-section-header h2{font-size:1.15rem;font-weight:800;letter-spacing:-0.01em;color:var(--navy);}
+  .r-section-header p{font-size:0.78rem;color:var(--gray-500);margin-top:0.1rem;}
+
+  .dim-results{display:grid;gap:0.4rem;}
+  .dim-row{display:grid;grid-template-columns:190px 1fr 48px;align-items:center;gap:0.8rem;padding:0.7rem 0.9rem;background:var(--gray-50);border:1px solid var(--gray-100);border-radius:6px;}
+  .dim-row-name{font-size:0.78rem;font-weight:700;color:var(--navy);}
+  .dim-row-bar{height:5px;background:var(--gray-100);border-radius:4px;overflow:hidden;}
+  .dim-row-fill{height:100%;border-radius:4px;transition:width 0.6s ease;}
+  .dim-row-score{font-size:0.72rem;font-weight:800;text-align:right;font-variant-numeric:tabular-nums;}
+  .dim-row-answer{grid-column:1/-1;font-size:0.74rem;color:var(--gray-500);padding-left:0.5rem;border-left:2px solid var(--gray-200);margin-top:-0.1rem;}
+
+  .insights{display:grid;gap:0.65rem;}
+  .insight-card{background:var(--white);border:1px solid var(--gray-100);border-radius:8px;padding:1.25rem;border-left:3px solid var(--level2);}
+  .insight-label{font-size:0.64rem;letter-spacing:0.12em;text-transform:uppercase;font-weight:800;margin-bottom:0.25rem;}
+  .insight-title{font-size:0.9rem;font-weight:700;color:var(--navy);margin-bottom:0.25rem;}
+  .insight-body{font-size:0.82rem;color:var(--gray-500);line-height:1.5;}
+  .insight-evidence{font-size:0.72rem;color:var(--gray-400);margin-top:0.4rem;font-style:italic;}
+  .insight-card.severity-high{border-left-color:var(--level1);}
+  .insight-card.severity-high .insight-label{color:var(--level1);}
+  .insight-card.severity-medium{border-left-color:var(--level2);}
+  .insight-card.severity-medium .insight-label{color:var(--level2);}
+
+  /* Action framework */
+  .action-context{display:flex;align-items:center;gap:1.25rem;background:var(--gray-50);border:1px solid var(--gray-100);border-radius:8px;padding:0.9rem 1.1rem;margin-bottom:1.5rem;}
+  .action-context .ctx-pill{flex-shrink:0;font-weight:800;font-size:0.78rem;padding:0.35rem 0.75rem;border-radius:6px;white-space:nowrap;}
+  .action-context .ctx-text{font-size:0.82rem;color:var(--gray-500);line-height:1.4;}
+  .action-context .ctx-text strong{color:var(--navy);}
+
+  .actions{display:grid;gap:0.65rem;margin-bottom:2rem;}
+  .action-card{display:grid;grid-template-columns:40px 1fr;gap:0.9rem;padding:1.1rem;background:var(--white);border:1px solid var(--gray-100);border-radius:8px;}
+  .action-card:hover{border-color:var(--gray-200);}
+  .action-num{width:40px;height:40px;border-radius:8px;background:var(--navy);color:var(--teal);display:flex;align-items:center;justify-content:center;font-size:1rem;font-weight:800;}
+  .action-content h3{font-size:0.9rem;font-weight:700;color:var(--navy);margin-bottom:0.15rem;}
+  .action-desc{font-size:0.82rem;color:var(--gray-500);line-height:1.5;margin-bottom:0.5rem;}
+  .action-meta{display:flex;gap:0.4rem;flex-wrap:wrap;}
+  .meta-tag{font-size:0.64rem;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;padding:0.2rem 0.5rem;border-radius:4px;}
+  .meta-solves{background:rgba(30,203,145,0.08);color:#15a070;border:1px solid rgba(30,203,145,0.2);}
+  .meta-quick{background:rgba(66,165,245,0.08);color:#2979c4;border:1px solid rgba(66,165,245,0.2);}
+  .meta-structural{background:rgba(255,167,38,0.08);color:#c77d10;border:1px solid rgba(255,167,38,0.2);}
+  .meta-foundational{background:rgba(239,83,80,0.08);color:#c74240;border:1px solid rgba(239,83,80,0.2);}
+
+  .prioritize{background:var(--teal-dim);border:1px solid var(--teal-border);border-radius:10px;padding:1.5rem;margin-bottom:2rem;}
+  .prioritize h3{font-size:0.95rem;font-weight:800;color:var(--navy);margin-bottom:0.5rem;}
+  .prioritize-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.6rem;}
+  .prioritize-slot{background:var(--white);border:1px dashed var(--gray-200);border-radius:8px;padding:0.85rem;text-align:center;}
+  .prioritize-slot .slot-label{font-size:0.66rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--gray-400);margin-bottom:0.2rem;}
+  .slot-quick .slot-label{color:#15a070;}
+  .slot-structural .slot-label{color:#2979c4;}
+  .prioritize-slot .slot-hint{font-size:0.76rem;color:var(--gray-500);}
+
+  .closing{background:var(--navy);border-radius:10px;padding:1.75rem;text-align:center;position:relative;overflow:hidden;}
+  .closing::before{content:'';position:absolute;bottom:-40%;left:50%;transform:translateX(-50%);width:500px;height:300px;background:radial-gradient(circle,rgba(30,203,145,0.08) 0%,transparent 70%);pointer-events:none;}
+  .closing p{font-size:1rem;font-weight:700;line-height:1.5;max-width:580px;margin:0 auto;color:var(--white);position:relative;}
+  .closing .sub{font-size:0.78rem;color:var(--gray-400);font-weight:400;margin-top:0.4rem;position:relative;}
+
+  .restart-row{text-align:center;margin-top:1.75rem;}
+  .footer{margin-top:2.5rem;padding-top:1rem;border-top:1px solid var(--gray-100);font-size:0.7rem;color:var(--gray-400);display:flex;justify-content:space-between;}
+
+  @media(max-width:768px){
+    .container{padding:1.5rem 1rem;}.hero h1{font-size:2rem;}.hero{padding:2.5rem 1.5rem 2rem;}
+    .q-text{font-size:1.3rem;}.level-legend{grid-template-columns:1fr;}
+    .overall-result{flex-direction:column;text-align:center;gap:1.25rem;}
+    .dim-row{grid-template-columns:1fr 48px;}.dim-row-name{grid-column:1/-1;}
+    .prioritize-grid{grid-template-columns:1fr;}.action-card{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="topbar-logo">taazaa</div>
+  <div class="topbar-tag">Delivery Maturity Assessment</div>
+</div>
+
+<div id="intro">
+  <div class="hero">
+    <h1>Delivery <span>Maturity</span><br>Assessment</h1>
+    <p>12 questions across core delivery dimensions. Each answer maps to a maturity level. The tool scores, diagnoses patterns, and recommends structural actions — all in one flow.</p>
+    <div class="level-legend">
+      <div class="level-legend-item"><div class="dot" style="background:var(--level1);"></div><div><span class="lbl">Level 1 — Ad Hoc</span><br><span class="desc">No defined approach. Entirely dependent on individuals.</span></div></div>
+      <div class="level-legend-item"><div class="dot" style="background:var(--level2);"></div><div><span class="lbl">Level 2 — Developing</span><br><span class="desc">Process exists but inconsistently applied. Person-dependent.</span></div></div>
+      <div class="level-legend-item"><div class="dot" style="background:var(--level3);"></div><div><span class="lbl">Level 3 — Defined</span><br><span class="desc">Standardized and consistently followed. Structurally enforced.</span></div></div>
+      <div class="level-legend-item"><div class="dot" style="background:var(--level4);"></div><div><span class="lbl">Level 4 — Optimized</span><br><span class="desc">Data-driven, continuously improving, system-dependent.</span></div></div>
+    </div>
+    <button class="btn" onclick="startAssessment()">Begin Assessment →</button>
+  </div>
+</div>
+
+<div id="assessment"><div class="container">
+  <div class="progress-bar"><div class="progress-track"><div class="progress-fill" id="progressFill"></div></div><div class="progress-label" id="progressLabel"></div></div>
+  <div class="q-dimension" id="qDimension"></div>
+  <div class="q-text" id="qText"></div>
+  <div class="options" id="optionsContainer"></div>
+  <div class="nav-row">
+    <button class="btn btn-secondary" id="prevBtn" onclick="prevQuestion()">← Back</button>
+    <button class="btn" id="nextBtn" onclick="nextQuestion()" disabled>Next →</button>
+  </div>
+</div></div>
+
+<div id="results">
+  <div class="results-hero"><h1>Assessment Results</h1><div class="overall-result" id="overallResult"></div></div>
+  <div class="container">
+    <div class="r-section-header"><h2>Dimension Scores</h2><p>Each score reflects the selected maturity level — with the answer shown beneath</p></div>
+    <div class="dim-results" id="dimResults"></div>
+    <div class="r-section-header"><h2>What the Scores Tell Us</h2><p>Pattern-based diagnostics generated from score clusters</p></div>
+    <div class="insights" id="insightsContainer"></div>
+
+    <!-- Action Framework — dynamically generated -->
+    <div class="r-section-header" style="margin-top:2.5rem;border-bottom-color:var(--teal-border);">
+      <h2 style="color:var(--teal);">From Diagnosis to Action</h2>
+      <p>Structural shifts tailored to the assessed maturity level</p>
+    </div>
+    <div id="actionContext"></div>
+    <div class="actions" id="actionsContainer"></div>
+    <div id="prioritizeContainer"></div>
+    <div id="closingContainer"></div>
+
+    <div class="restart-row"><button class="btn btn-secondary" onclick="restart()">↻ Retake Assessment</button></div>
+    <div class="footer"><span>Delivery Maturity Assessment · Taazaa PMO</span><span>Internal Use</span></div>
+  </div>
+</div>
+
+<script>
+const questions=[
+{id:'process',dimension:'Process Standardization',question:'How standardized is the delivery process across projects and products?',options:['Every PM does their own thing — no common approach','Some common practices exist but they are not enforced','Documented standards that are mostly followed across teams','Tight, consistent process with reliable execution everywhere']},
+{id:'escalation',dimension:'Escalation & Decision-Making',question:'When something goes wrong on a project, how does escalation work?',options:['Depends entirely on the PM — no clear path exists','There\'s a process but it\'s used inconsistently','Defined escalation path that most people follow','Clear escalation path that is consistently followed and drives decisions']},
+{id:'visibility',dimension:'Portfolio Visibility',question:'How is project health tracked across the portfolio?',options:['Individual PM updates with no unified view','Shared tooling in place but adoption is inconsistent','Unified tracking tool with consistent usage across teams','Single dashboard with real-time data that leadership actively uses']},
+{id:'resources',dimension:'Resource Management',question:'How is resource allocation decided across projects?',options:['Whoever asks first or loudest gets people','Director or leadership makes calls ad hoc — no systematic process','Capacity planning process exists and is followed for most decisions','Systematic capacity planning with full visibility into utilization and forecasting']},
+{id:'early_warning',dimension:'Early Warning & Risk Detection',question:'When a project is underperforming, how quickly does leadership find out?',options:['Usually when it\'s already a fire','Depends on the PM — some flag early, some don\'t','Regular reviews reliably catch it within a sprint or two','Real-time visibility — leadership sees leading indicators as they emerge']},
+{id:'ownership',dimension:'Outcome Ownership',question:'How clear is ownership of delivery outcomes — not tasks, but outcomes?',options:['Nobody really owns the outcome end-to-end','PM owns it but doesn\'t have the authority to enforce it','Clear ownership with some authority, but it overlaps with other roles','Single owner with real decision-making authority on scope, resources, and trade-offs']},
+{id:'governance',dimension:'Governance',question:'Do governance checkpoints (stage gates, milestone reviews) actually influence decisions?',options:['No formal reviews — projects run until they end','Milestone reviews happen but they\'re status updates, not decision gates','Stage gates exist and occasionally drive real go/no-go decisions','Governance checkpoints consistently trigger adjustments, course corrections, or stops']},
+{id:'metrics',dimension:'Metrics & Data',question:'How mature is the use of delivery metrics?',options:['We track hours and maybe velocity — that\'s about it','Metrics exist but nobody consistently looks at them','Regular reviews of delivery metrics with some actions taken as a result','Metrics actively drive decisions on staffing, scope, and priorities']},
+{id:'learning',dimension:'Learning & Improvement',question:'How does learning from past projects feed back into the organization?',options:['No structured retrospectives or post-mortems','Retros happen but follow-through is weak','Retros happen and sometimes produce real process changes','Continuous improvement loop — retros reliably drive systemic changes']},
+{id:'pm_capability',dimension:'PM Capability Consistency',question:'How consistent is PM capability across the team?',options:['Wide variance — a few strong PMs carry the organization','Generally competent but with significant skill gaps in specific areas','Mostly consistent capability with occasional weak spots','Strong bench — any PM can run any project to a reliable standard']},
+{id:'cross_project',dimension:'Cross-Project Coordination',question:'How are cross-project dependencies handled?',options:['Each project is its own island','People informally coordinate when they notice overlap','Some visibility into dependencies but nobody owns resolution','Active dependency management with a dedicated owner and regular reviews']},
+{id:'ai_adoption',dimension:'AI & Automation Adoption',question:'How much has AI and automation been adopted in delivery workflows?',options:['Barely — still mostly manual everything','Org-wide adoption is underway but coverage is not expanding as expected','Specific use cases adopted and delivering value (reporting, docs, etc.)','Embedded in workflows — AI and automation are part of how we operate']}
+];
+
+const insightRules=[
+{id:'authority_gap',label:'Structural Finding',severity:'high',title:'Responsibility without authority',check:s=>s.ownership<=2&&s.resources<=2,body:'PMs carry responsibility for delivery outcomes but lack the structural authority to enforce them. Resource decisions are made ad hoc at the leadership level.',evidence:s=>`Outcome Ownership: Level ${s.ownership} · Resource Management: Level ${s.resources}`},
+{id:'person_dependent',label:'Scaling Risk',severity:'high',title:'Delivery quality is person-dependent, not system-dependent',check:s=>s.pm_capability<=2&&s.process<=2,body:'A few strong PMs carry the org while processes exist but aren\'t enforced. Delivery quality depends on which PM is assigned, not on organizational systems.',evidence:s=>`PM Capability: Level ${s.pm_capability} · Process Standardization: Level ${s.process}`},
+{id:'no_feedback_loop',label:'Systemic Gap',severity:'medium',title:'No functioning feedback loop',check:s=>s.metrics<=2&&s.governance<=2&&s.learning<=2,body:'Metrics are collected but not consumed. Reviews happen but don\'t trigger decisions. Retros occur but don\'t reliably change anything. The three learning mechanisms are present but disconnected from action.',evidence:s=>`Metrics: Level ${s.metrics} · Governance: Level ${s.governance} · Learning: Level ${s.learning}`},
+{id:'coordination_void',label:'Structural Finding',severity:'high',title:'Nobody owns the space between projects',check:s=>s.cross_project<=2&&s.resources<=2,body:'Cross-project dependencies are handled informally and resource allocation is ad hoc. Nobody structurally owns what happens between projects.',evidence:s=>`Cross-Project Coordination: Level ${s.cross_project} · Resource Management: Level ${s.resources}`},
+{id:'visibility_gap',label:'Operational Risk',severity:'medium',title:'Leadership visibility depends on individual PM behavior',check:s=>s.visibility<=2&&s.early_warning<=2,body:'Portfolio tracking tools exist but are used inconsistently. Early warning depends on whether the PM flags it. No structural safety net.',evidence:s=>`Portfolio Visibility: Level ${s.visibility} · Early Warning: Level ${s.early_warning}`},
+{id:'governance_theater',label:'Process Gap',severity:'medium',title:'Governance exists but doesn\'t govern',check:s=>s.governance<=2&&s.ownership<=2,body:'Milestone reviews are informational, not decisional. No point in the lifecycle where someone with authority asks "should we continue, adjust, or stop?"',evidence:s=>`Governance: Level ${s.governance} · Outcome Ownership: Level ${s.ownership}`},
+{id:'ai_stall',label:'Adoption Gap',severity:'medium',title:'AI adoption initiated but not landing',check:s=>s.ai_adoption<=2,body:'AI adoption has organizational intent but coverage isn\'t expanding as expected. Often because adoption is treated as tooling, not workflow redesign.',evidence:s=>`AI & Automation: Level ${s.ai_adoption}`},
+{id:'inconsistency_root',label:'Root Cause',severity:'medium',title:'Delivery inconsistency is a symptom, not the disease',check:s=>s.process<=2&&s.metrics<=2&&s.learning<=2,body:'Processes aren\'t enforced. Metrics aren\'t reviewed. Retros don\'t reliably change things. The system doesn\'t create consistency; individual PMs either bring it or they don\'t.',evidence:s=>`Process: Level ${s.process} · Metrics: Level ${s.metrics} · Learning: Level ${s.learning}`}
+];
+
+// ── Tiered action frameworks ──
+const actionTiers = {
+  // Level 1: Ad Hoc — build foundations
+  adHoc: {
+    context: { pill:'Level 1', pillBg:'var(--navy)', pillColor:'var(--level1)', text:'<strong>Foundation phase:</strong> The org lacks basic delivery infrastructure. Before restructuring, establish the fundamentals. Any PMO model applied at this maturity will collapse under its own weight.' },
+    actions: [
+      { title:'Assign explicit PM ownership for every active project', desc:'No project runs without a named owner who is accountable for the outcome. This is the single most impactful first step — without it, nothing else sticks.', tags:[{label:'Foundational',cls:'meta-foundational'},{label:'This week',cls:'meta-quick'}] },
+      { title:'Create one shared project tracker — any tool, enforced usage', desc:'Pick one tool and mandate its use. Not optional, not "encouraged." The specific tool matters less than universal adoption. Visibility is impossible without a single source.', tags:[{label:'Foundational',cls:'meta-foundational'},{label:'30-day change',cls:'meta-quick'}] },
+      { title:'Define a basic escalation path — who to call when things break', desc:'Doesn\'t need to be elaborate. Just answer: when a PM hits a blocker they can\'t resolve, who do they go to, and what\'s expected to happen?', tags:[{label:'Foundational',cls:'meta-foundational'},{label:'This week',cls:'meta-quick'}] },
+      { title:'Run a weekly 30-minute portfolio review — no exceptions', desc:'Leadership sees all active projects in one room, once a week. This alone creates accountability pressure that no process document can match.', tags:[{label:'Creates visibility',cls:'meta-solves'},{label:'30-day change',cls:'meta-quick'}] },
+      { title:'Pick 3 non-negotiable delivery practices and enforce them', desc:'Start small. Three things every project must do: a kickoff, a weekly status update, and a risk log. Build the habit of consistency before scaling the process.', tags:[{label:'Creates baseline',cls:'meta-solves'},{label:'30-day change',cls:'meta-quick'}] }
+    ],
+    closing: { main:'Before choosing a PMO model, build the foundation it will sit on.', sub:'A restructure at Level 1 maturity will create structure without substance. Establish basics first, then design the org around them.' },
+    prioritize: { left:{label:'This Week',hint:'Assign ownership. Define escalation. These require decisions, not planning.'}, right:{label:'30-Day Foundation',hint:'Shared tracker, weekly reviews, 3 non-negotiable practices. Build the habits.'} }
+  },
+
+  // Level 1.5–2.0: Low Developing — enforce and empower
+  lowDeveloping: {
+    context: { pill:'Level 2 (Low)', pillBg:'var(--navy)', pillColor:'var(--level2)', text:'<strong>Enforcement phase:</strong> The building blocks exist — processes, tools, intent — but nothing is enforced and everything depends on which PM is running things. The restructure needs to make delivery system-dependent, not person-dependent.' },
+    actions: [
+      { title:'Define what PMs can decide without escalating', desc:'If PMs own outcomes, they need defined authority for resource and scope trade-offs. Draw the boundary: what can a PM decide alone vs. what needs escalation? Without this, accountability is just a word on a RACI.', tags:[{label:'Solves: Authority gap',cls:'meta-solves'},{label:'30-day change',cls:'meta-quick'}] },
+      { title:'Make milestone reviews decisional, not informational', desc:'Reviews should answer "do we continue, adjust, or stop?" — not "here\'s what happened." Requires no new roles or tools — just a change in what the meeting is for and who has decision authority.', tags:[{label:'Solves: Governance theater',cls:'meta-solves'},{label:'Solves: No feedback loop',cls:'meta-solves'},{label:'30-day change',cls:'meta-quick'}] },
+      { title:'Assign cross-project dependency ownership', desc:'Someone needs to own the space between projects — resource conflicts, shared dependencies, competing priorities. This is either a Program Manager role or an explicit responsibility added to a senior PM.', tags:[{label:'Solves: Coordination void',cls:'meta-solves'},{label:'90-day structural',cls:'meta-structural'}] },
+      { title:'Establish 5–7 non-negotiable delivery practices', desc:'Pick the practices every project must follow regardless of PM. Everything else can flex. The floor creates consistency; flexibility above it preserves autonomy. This directly addresses person-dependent delivery.', tags:[{label:'Solves: Person-dependency',cls:'meta-solves'},{label:'Solves: Inconsistency',cls:'meta-solves'},{label:'90-day structural',cls:'meta-structural'}] },
+      { title:'Embed metric reviews into the operating cadence', desc:'The data exists. The problem is nobody is required to look at it. Build metric consumption into existing meetings — not as a separate activity, but as a standing agenda item.', tags:[{label:'Solves: Visibility gap',cls:'meta-solves'},{label:'Solves: No feedback loop',cls:'meta-solves'},{label:'30-day change',cls:'meta-quick'}] }
+    ],
+    closing: { main:'The restructure should solve for one thing: making delivery outcomes system-dependent instead of person-dependent.', sub:'Whatever model is chosen — if it doesn\'t create structural consistency independent of who\'s running the project, it will rearrange boxes without changing results.' },
+    prioritize: { left:{label:'30-Day Quick Wins',hint:'No new roles. No new tools. Change what existing meetings do and what PMs are empowered to decide.'}, right:{label:'90-Day Structural Changes',hint:'Requires new ownership assignments, process definition, or role adjustments. Needs planning.'} }
+  },
+
+  // Level 2.0–2.5: High Developing — tighten and formalize
+  highDeveloping: {
+    context: { pill:'Level 2 (High)', pillBg:'var(--navy)', pillColor:'var(--level2)', text:'<strong>Formalization phase:</strong> Foundations exist and some are working. The gap is enforcement consistency and formalizing what\'s informal. Don\'t build new — tighten what you have.' },
+    actions: [
+      { title:'Audit which existing processes are actually followed — and why', desc:'Some practices stick, others don\'t. Find out why. The ones that work have enforcement or natural accountability behind them. Replicate that pattern for the ones that don\'t.', tags:[{label:'Tighten existing',cls:'meta-solves'},{label:'30-day change',cls:'meta-quick'}] },
+      { title:'Formalize the informal escalation and coordination paths', desc:'People know who to call — but it\'s tribal knowledge. Document it, make it official, remove the dependency on knowing the right person. Turn implicit networks into explicit processes.', tags:[{label:'Solves: Inconsistency',cls:'meta-solves'},{label:'30-day change',cls:'meta-quick'}] },
+      { title:'Close the authority gap — expand PM decision boundaries', desc:'PMs likely have some authority but it\'s unclear where it ends. Formally define and expand it. The goal: PMs escalate by exception, not by default.', tags:[{label:'Solves: Authority gap',cls:'meta-solves'},{label:'30-day change',cls:'meta-quick'}] },
+      { title:'Introduce a program layer for cross-project orchestration', desc:'At this maturity, informal coordination starts breaking. A formal program management function — even one person — to own dependencies, resource contention, and portfolio-level trade-offs.', tags:[{label:'Solves: Coordination void',cls:'meta-solves'},{label:'90-day structural',cls:'meta-structural'}] },
+      { title:'Make data the agenda — shift reviews from narrative to metrics', desc:'Move leadership reviews from PM storytelling to metric-driven discussions. Standardize what\'s reported. When the format is consistent, the conversation focuses on substance.', tags:[{label:'Solves: Visibility gap',cls:'meta-solves'},{label:'30-day change',cls:'meta-quick'}] }
+    ],
+    closing: { main:'The foundations exist. The gap is enforcement and authority — not process design.', sub:'Focus on empowering the processes and systems already in place, not adding new layers on top of what isn\'t being used.' },
+    prioritize: { left:{label:'30-Day Tightening',hint:'Formalize the informal. Expand PM authority. Shift reviews to metrics. No new headcount needed.'}, right:{label:'90-Day Formalization',hint:'Program layer, standardized governance, role boundary clarity.'} }
+  },
+
+  // Level 3+: Defined — optimize specific weaknesses
+  defined: {
+    context: { pill:'Level 3+', pillBg:'var(--navy)', pillColor:'var(--level3)', text:'<strong>Optimization phase:</strong> The system works. Delivery quality is structurally enforced, not person-dependent. The restructure should target specific weak dimensions rather than broad redesign.' },
+    actions: [
+      { title:'Identify and fix the 2–3 lowest-scoring dimensions only', desc:'Don\'t redesign what\'s working. Isolate the weakest areas from the assessment and apply targeted interventions. The system is strong enough that improvements in specific areas will compound.', tags:[{label:'Targeted',cls:'meta-solves'},{label:'30-day change',cls:'meta-quick'}] },
+      { title:'Automate the reporting and visibility layer', desc:'At this maturity, manual reporting is overhead. Invest in dashboards, automated status pulls from project tools, and predictive indicators. Free PM time from reporting and redirect it to delivery.', tags:[{label:'Efficiency',cls:'meta-solves'},{label:'90-day structural',cls:'meta-structural'}] },
+      { title:'Build predictive risk detection into the cadence', desc:'Move from reactive risk identification to predictive. Use velocity trends, scope change patterns, and historical data to flag risks before PMs surface them.', tags:[{label:'Maturity leap',cls:'meta-solves'},{label:'90-day structural',cls:'meta-structural'}] },
+      { title:'Formalize the continuous improvement loop', desc:'Retros should feed directly into process updates with a named owner for each action item. Close the loop between learning and change — this is what separates Level 3 from Level 4.', tags:[{label:'L3 → L4 bridge',cls:'meta-solves'},{label:'30-day change',cls:'meta-quick'}] },
+      { title:'Scale the model — document and replicate across teams', desc:'What works should be codified into a playbook that new teams and PMs can follow. The goal is replication without degradation — every new project gets the same system.', tags:[{label:'Scalability',cls:'meta-solves'},{label:'90-day structural',cls:'meta-structural'}] }
+    ],
+    closing: { main:'The system works. Don\'t redesign — optimize.', sub:'Protect what\'s working while surgically addressing remaining gaps. The risk at this maturity is over-engineering, not under-building.' },
+    prioritize: { left:{label:'30-Day Targeted Fixes',hint:'Fix the weakest 2–3 dimensions. Close the retro-to-action loop. Quick, focused interventions.'}, right:{label:'90-Day Optimization',hint:'Automation, predictive capabilities, playbook documentation. Invest in scaling.'} }
+  }
+};
+
+function getTier(avg) {
+  if (avg < 1.5) return actionTiers.adHoc;
+  if (avg < 2.0) return actionTiers.lowDeveloping;
+  if (avg < 2.5) return actionTiers.highDeveloping;
+  return actionTiers.defined;
+}
+
+let currentQ=0, answers={};
+
+function startAssessment(){document.getElementById('intro').style.display='none';document.getElementById('assessment').style.display='block';renderQuestion();}
+
+function renderQuestion(){
+  const q=questions[currentQ];
+  document.getElementById('qDimension').textContent=q.dimension;
+  document.getElementById('qText').textContent=q.question;
+  document.getElementById('progressLabel').textContent=`${currentQ+1} / ${questions.length}`;
+  document.getElementById('progressFill').style.width=`${((currentQ+1)/questions.length)*100}%`;
+  const c=document.getElementById('optionsContainer');c.innerHTML='';
+  q.options.forEach((opt,i)=>{const level=i+1;const div=document.createElement('div');div.className='option'+(answers[q.id]===level?` selected-${level}`:'');div.innerHTML=`<div class="option-level ol-${level}">${['L1','L2','L3','L4'][i]}</div><div class="option-text">${opt}</div>`;div.onclick=()=>{answers[q.id]=level;renderQuestion();};c.appendChild(div);});
+  document.getElementById('prevBtn').style.visibility=currentQ===0?'hidden':'visible';
+  const nb=document.getElementById('nextBtn');nb.textContent=currentQ===questions.length-1?'See Results →':'Next →';nb.disabled=!answers[questions[currentQ].id];
+}
+
+function nextQuestion(){if(!answers[questions[currentQ].id])return;if(currentQ<questions.length-1){currentQ++;renderQuestion();}else showResults();}
+function prevQuestion(){if(currentQ>0){currentQ--;renderQuestion();}}
+
+function getScores(){const s={};questions.forEach(q=>{s[q.id]=answers[q.id]||0;});return s;}
+function getAverage(s){const v=Object.values(s);return v.reduce((a,b)=>a+b,0)/v.length;}
+function getLevelInfo(avg){
+  if(avg<1.5)return{level:1,label:'Ad Hoc',color:'var(--level1)',desc:'No defined approach across most dimensions. Delivery is reactive and entirely dependent on individual capability.'};
+  if(avg<2.5)return{level:2,label:'Developing',color:'var(--level2)',desc:'Processes, tools, and intent exist — but enforcement and consistency are missing. Delivery quality depends on which PM is running the project.'};
+  if(avg<3.5)return{level:3,label:'Defined',color:'var(--level3)',desc:'Standardized processes in place and consistently followed. Delivery quality is system-dependent.'};
+  return{level:4,label:'Optimized',color:'var(--level4)',desc:'Data-driven and continuously improving. Delivery is system-dependent with self-correcting feedback loops.'};
+}
+function getScoreColor(v){if(v<=1.5)return'var(--level1)';if(v<=2.5)return'var(--level2)';if(v<=3.5)return'var(--level3)';return'var(--level4)';}
+
+function showResults(){
+  document.getElementById('assessment').style.display='none';
+  document.getElementById('results').style.display='block';
+  const scores=getScores(), avg=getAverage(scores), info=getLevelInfo(avg);
+
+  // Overall
+  document.getElementById('overallResult').innerHTML=`<div class="score-ring" style="border-color:${info.color};"><div class="num">${avg.toFixed(1)}</div><div class="of">of 4.0</div></div><div class="overall-desc"><h2>Level ${info.level} — <span style="color:${info.color};">${info.label}</span></h2><p>${info.desc}</p></div>`;
+
+  // Dimensions
+  const dc=document.getElementById('dimResults');dc.innerHTML='';
+  questions.forEach(q=>{const score=scores[q.id],color=getScoreColor(score),div=document.createElement('div');div.className='dim-row';div.innerHTML=`<div class="dim-row-name">${q.dimension}</div><div class="dim-row-bar"><div class="dim-row-fill" style="width:${(score/4)*100}%;background:${color};"></div></div><div class="dim-row-score" style="color:${color};">${score}/4</div><div class="dim-row-answer">${q.options[score-1]}</div>`;dc.appendChild(div);});
+
+  // Insights
+  const triggered=insightRules.filter(r=>r.check(scores)),ic=document.getElementById('insightsContainer');ic.innerHTML='';
+  if(triggered.length===0)ic.innerHTML='<p style="color:var(--gray-500);padding:0.75rem;">No critical patterns detected — scores are balanced across dimensions.</p>';
+  else triggered.forEach(ins=>{const div=document.createElement('div');div.className=`insight-card severity-${ins.severity}`;div.innerHTML=`<div class="insight-label">${ins.label}</div><div class="insight-title">${ins.title}</div><div class="insight-body">${ins.body}</div><div class="insight-evidence">Evidence: ${ins.evidence(scores)}</div>`;ic.appendChild(div);});
+
+  // Action Framework — tiered
+  const tier=getTier(avg);
+
+  // Context bar
+  document.getElementById('actionContext').innerHTML=`<div class="action-context"><div class="ctx-pill" style="background:${tier.context.pillBg};color:${tier.context.pillColor};">${tier.context.pill}</div><div class="ctx-text">${tier.context.text}</div></div>`;
+
+  // Action cards
+  const ac=document.getElementById('actionsContainer');ac.innerHTML='';
+  tier.actions.forEach((a,i)=>{const div=document.createElement('div');div.className='action-card';div.innerHTML=`<div class="action-num">${i+1}</div><div class="action-content"><h3>${a.title}</h3><div class="action-desc">${a.desc}</div><div class="action-meta">${a.tags.map(t=>`<span class="meta-tag ${t.cls}">${t.label}</span>`).join('')}</div></div>`;ac.appendChild(div);});
+
+  // Prioritization
+  const p=tier.prioritize;
+  document.getElementById('prioritizeContainer').innerHTML=`<div class="prioritize"><h3>Discussion: Which do we tackle first?</h3><div class="prioritize-grid"><div class="prioritize-slot slot-quick"><div class="slot-label">${p.left.label}</div><div class="slot-hint">${p.left.hint}</div></div><div class="prioritize-slot slot-structural"><div class="slot-label">${p.right.label}</div><div class="slot-hint">${p.right.hint}</div></div></div></div>`;
+
+  // Closing
+  const cl=tier.closing;
+  document.getElementById('closingContainer').innerHTML=`<div class="closing"><p>${cl.main}</p><div class="sub">${cl.sub}</div></div>`;
+
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function restart(){answers={};currentQ=0;document.getElementById('results').style.display='none';document.getElementById('intro').style.display='block';window.scrollTo({top:0,behavior:'smooth'});}
+</script>
+</body>
+</html>
