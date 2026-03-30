@@ -58,6 +58,7 @@
   .ol-3{background:var(--level3-dim);color:var(--level3);border:1px solid var(--level3-border);}
   .ol-4{background:var(--level4-dim);color:var(--level4);border:1px solid var(--level4-border);}
   .option-text{font-size:0.88rem;color:var(--navy);line-height:1.45;}
+  .kb-hint{text-align:center;font-size:0.7rem;color:var(--gray-400);margin-top:0.75rem;letter-spacing:0.02em;}
   .nav-row{display:flex;justify-content:space-between;align-items:center;margin-top:2.5rem;}
 
   /* Results */
@@ -151,6 +152,32 @@
   .ms-text{color:var(--gray-500);}
   .phase-dep{font-size:0.7rem;color:var(--gray-400);font-style:italic;margin-top:0.3rem;}
 
+  /* Sticky score bar */
+  .sticky-score{position:sticky;top:0;z-index:10;background:var(--navy);display:none;align-items:center;justify-content:center;gap:1rem;padding:0.5rem 2rem;border-bottom:1px solid var(--navy-light);}
+  .sticky-score .ss-pill{font-size:0.7rem;font-weight:800;padding:0.2rem 0.6rem;border-radius:4px;border:1px solid;line-height:1;}
+  .sticky-score .ss-label{font-size:0.75rem;font-weight:600;color:var(--white);}
+  .sticky-score .ss-level{font-size:0.75rem;color:var(--gray-400);}
+
+  /* Section numbers */
+  .section-num{font-size:0.62rem;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;color:var(--teal);margin-bottom:0.25rem;}
+
+  /* Top 3 Priorities band */
+  .top3-band{background:var(--navy);padding:2.5rem 2rem;margin-top:2.5rem;}
+  .top3-inner{max-width:840px;margin:0 auto;}
+  .top3-band .section-num{color:var(--teal);}
+  .top3-band h2{font-size:1.15rem;font-weight:800;color:var(--white);margin-bottom:0.25rem;}
+  .top3-band>p,.top3-inner>p{font-size:0.78rem;color:var(--gray-400);margin-bottom:1.25rem;}
+  .top3-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.75rem;}
+  .top3-card{background:var(--navy-mid);border:1px solid var(--navy-light);border-radius:8px;padding:1.1rem;position:relative;}
+  .top3-rank{font-size:1.5rem;font-weight:800;color:var(--teal);line-height:1;margin-bottom:0.4rem;opacity:0.5;}
+  .top3-dim{font-size:0.88rem;font-weight:700;color:var(--white);margin-bottom:0.3rem;}
+  .top3-score{display:inline-block;font-size:0.64rem;font-weight:800;padding:0.15rem 0.45rem;border-radius:3px;margin-bottom:0.4rem;}
+  .top3-desc{font-size:0.78rem;color:var(--gray-400);line-height:1.45;}
+
+  /* Roadmap tint band */
+  .roadmap-band{background:var(--gray-50);padding:2.5rem 2rem;border-top:1px solid var(--gray-100);border-bottom:1px solid var(--gray-100);}
+  .roadmap-band .container{padding:0;max-width:840px;margin:0 auto;}
+
   .restart-row{text-align:center;margin-top:1.75rem;}
   .footer{margin-top:2.5rem;padding-top:1rem;border-top:1px solid var(--gray-100);font-size:0.7rem;color:var(--gray-400);display:flex;justify-content:space-between;}
 
@@ -161,6 +188,8 @@
     .dim-row{grid-template-columns:1fr 48px;}.dim-row-name{grid-column:1/-1;}
     .prioritize-grid{grid-template-columns:1fr;}.action-card{grid-template-columns:1fr;}
     .phase-card{grid-template-columns:1fr;}.phase-left{border-right:none;border-bottom:1px solid var(--navy-light);border-radius:0 !important;padding:0.75rem 1rem;flex-direction:row;gap:0.5rem;align-items:center;}
+    .top3-grid{grid-template-columns:1fr;}.top3-band{padding:2rem 1.5rem;}.roadmap-band{padding:2rem 1.5rem;}
+    .sticky-score{padding:0.5rem 1rem;gap:0.6rem;}
   }
 </style>
 </head>
@@ -189,6 +218,7 @@
   <div class="q-dimension" id="qDimension"></div>
   <div class="q-text" id="qText"></div>
   <div class="options" id="optionsContainer"></div>
+  <div class="kb-hint" id="kbHint">Press 1–4 to select · Enter to continue · ← → to navigate</div>
   <div class="nav-row">
     <button class="btn btn-secondary" id="prevBtn" onclick="prevQuestion()">← Back</button>
     <button class="btn" id="nextBtn" onclick="nextQuestion()" disabled>Next →</button>
@@ -196,31 +226,49 @@
 </div></div>
 
 <div id="results">
-  <div class="results-hero"><h1>Assessment Results</h1><div id="execSummary"></div><div class="overall-result" id="overallResult"></div></div>
-  <div class="container">
-    <div class="r-section-header"><h2>Dimension Scores</h2><p>Each score reflects the selected maturity level — with the answer shown beneath</p></div>
-    <div class="dim-results" id="dimResults"></div>
-    <div class="r-section-header"><h2>What the Scores Tell Us</h2><p>Systemic diagnostics generated from score clusters, contradictions, and cross-dimension patterns</p></div>
-    <div class="insights" id="insightsContainer"></div>
+  <!-- Sticky score bar -->
+  <div class="sticky-score" id="stickyScore"></div>
 
-    <!-- Action Framework — dynamically generated -->
-    <div class="r-section-header" style="margin-top:2.5rem;border-bottom-color:var(--teal-border);">
-      <h2 style="color:var(--teal);">From Diagnosis to Action</h2>
-      <p>Structural decisions required at this maturity level</p>
+  <!-- Hero: score ring -->
+  <div class="results-hero"><h1>Assessment Results</h1><div id="execSummary"></div><div class="overall-result" id="overallResult"></div></div>
+
+  <!-- Section 01: Dimension Scores (white) -->
+  <div class="container">
+    <div class="r-section-header"><div class="section-num">01</div><h2>Dimension Scores</h2><p>Each score reflects the selected maturity level — with the answer shown beneath</p></div>
+    <div class="dim-results" id="dimResults"></div>
+    <div class="r-section-header"><div class="section-num">02</div><h2>What the Scores Tell Us</h2><p>Systemic diagnostics generated from score clusters, contradictions, and cross-dimension patterns</p></div>
+    <div class="insights" id="insightsContainer"></div>
+  </div>
+
+  <!-- Section 03: Top 3 Priorities (navy band — the pivot) -->
+  <div class="top3-band" id="top3Band">
+    <div class="top3-inner">
+      <div class="section-num">03</div>
+      <h2>Where to Focus First</h2>
+      <p>The three dimensions with the most room for structural improvement</p>
+      <div class="top3-grid" id="top3Grid"></div>
     </div>
+  </div>
+
+  <!-- Section 04: Diagnosis to Action (white) -->
+  <div class="container">
+    <div class="r-section-header" style="border-bottom-color:var(--teal-border);"><div class="section-num">04</div><h2 style="color:var(--teal);">From Diagnosis to Action</h2><p>Structural decisions required at this maturity level</p></div>
     <div id="actionContext"></div>
     <div class="actions" id="actionsContainer"></div>
     <div id="prioritizeContainer"></div>
+  </div>
 
-    <!-- Phased Roadmap — dynamically generated -->
-    <div class="r-section-header" id="phasesHeader" style="display:none;margin-top:2.5rem;">
-      <h2>Phased Roadmap</h2>
-      <p>Sequenced so each phase creates the conditions for the next — not everything at once</p>
+  <!-- Section 05: Phased Roadmap (tinted band) -->
+  <div class="roadmap-band" id="roadmapBand" style="display:none;">
+    <div class="container">
+      <div class="r-section-header" id="phasesHeader" style="margin-top:0;"><div class="section-num">05</div><h2>Phased Roadmap</h2><p>Sequenced so each phase creates the conditions for the next — not everything at once</p></div>
+      <div class="phases" id="phasesContainer"></div>
     </div>
-    <div class="phases" id="phasesContainer"></div>
+  </div>
 
-    <div id="closingContainer"></div>
-
+  <!-- Closing + footer (back to white container) -->
+  <div class="container">
+    <div id="closingContainer" style="margin-top:2rem;"></div>
     <div class="restart-row"><button class="btn btn-secondary" onclick="restart()">↻ Retake Assessment</button></div>
     <div class="footer"><span>Delivery Maturity Assessment v2 · Taazaa PMO</span><span>Leadership Use · Enhanced with PM OS diagnostics</span></div>
   </div>
@@ -403,35 +451,78 @@ function getLevelInfo(avg){
   return{level:4,label:'Optimized',color:'var(--level4)',desc:'Data-driven and continuously improving. Delivery is system-dependent with self-correcting feedback loops.'};
 }
 function getScoreColor(v){if(v<=1.5)return'var(--level1)';if(v<=2.5)return'var(--level2)';if(v<=3.5)return'var(--level3)';return'var(--level4)';}
+function getScoreColorRaw(v){if(v<=1.5)return'#ef5350';if(v<=2.5)return'#ffa726';if(v<=3.5)return'#1ecb91';return'#42a5f5';}
+function getScoreBg(v){if(v<=1.5)return'rgba(239,83,80,0.15)';if(v<=2.5)return'rgba(255,167,38,0.15)';if(v<=3.5)return'rgba(30,203,145,0.15)';return'rgba(66,165,245,0.15)';}
+
+const dimDescriptions={
+  process:'No consistent delivery process — quality varies by PM',
+  scope_stability:'Scope shifts without trade-off governance',
+  escalation:'Escalation paths are undefined or inconsistent',
+  decision_velocity:'Decisions stall — authority is unclear',
+  ownership:'Nobody clearly owns delivery outcomes end-to-end',
+  governance:'Governance checkpoints don\'t drive decisions',
+  visibility:'Leadership has no reliable portfolio view',
+  early_warning:'Problems surface late — no structural early warning',
+  metrics:'Delivery metrics aren\'t driving decisions',
+  learning:'Retros don\'t produce lasting change',
+  team_sustainability:'Delivery velocity is borrowed from burnout',
+  tech_health:'Technical foundation is creating delivery drag',
+  resources:'Resource allocation is reactive and ad hoc',
+  cross_project:'Nobody owns cross-project coordination',
+  pm_capability:'PM capability is uneven — a few carry the load',
+  knowledge_distribution:'Critical knowledge is concentrated in few people',
+  ai_adoption:'AI adoption hasn\'t landed in delivery workflows'
+};
 
 function showResults(){
   document.getElementById('assessment').style.display='none';
   document.getElementById('results').style.display='block';
   const scores=getScores(), avg=getAverage(scores), info=getLevelInfo(avg);
 
+  // Sticky score bar
+  const ss=document.getElementById('stickyScore');
+  ss.style.display='flex';
+  ss.innerHTML=`<div class="ss-pill" style="color:${getScoreColorRaw(avg)};border-color:${getScoreColorRaw(avg)};background:${getScoreBg(avg)};">${avg.toFixed(1)}/4.0</div><div class="ss-label">Level ${info.level} — ${info.label}</div>`;
+
+  // Overall result
   document.getElementById('overallResult').innerHTML=`<div class="score-ring" style="border-color:${info.color};"><div class="num">${avg.toFixed(1)}</div><div class="of">of 4.0</div></div><div class="overall-desc"><h2>Level ${info.level} — <span style="color:${info.color};">${info.label}</span></h2><p>${info.desc}</p></div>`;
 
+  const tier=getTier(avg);
+  document.getElementById('execSummary').innerHTML='<div class="exec-summary">'+tier.execSummary+'</div>';
+
+  // Dimension scores
   const dc=document.getElementById('dimResults');dc.innerHTML='';
   questions.forEach(q=>{const score=scores[q.id],color=getScoreColor(score),div=document.createElement('div');div.className='dim-row';div.innerHTML=`<div class="dim-row-name">${q.dimension}</div><div class="dim-row-bar"><div class="dim-row-fill" style="width:${(score/4)*100}%;background:${color};"></div></div><div class="dim-row-score" style="color:${color};">${score}/4</div><div class="dim-row-answer">${q.options[score-1]}</div>`;dc.appendChild(div);});
 
+  // Insights
   const triggered=insightRules.filter(r=>r.check(scores)),ic=document.getElementById('insightsContainer');ic.innerHTML='';
   if(triggered.length===0)ic.innerHTML='<p style="color:var(--gray-500);padding:0.75rem;">No critical patterns detected — scores are balanced across dimensions.</p>';
   else triggered.forEach(ins=>{const div=document.createElement('div');div.className=`insight-card severity-${ins.severity}`;div.innerHTML=`<div class="insight-label">${ins.label}</div><div class="insight-title">${ins.title}</div><div class="insight-body">${ins.body}</div><div class="insight-evidence">Evidence: ${ins.evidence(scores)}</div>`;ic.appendChild(div);});
 
-  const tier=getTier(avg);
+  // Top 3 Priorities
+  const sorted=questions.map(q=>({id:q.id,dim:q.dimension,score:scores[q.id]})).sort((a,b)=>a.score-b.score);
+  const top3=sorted.slice(0,3);
+  const t3g=document.getElementById('top3Grid');t3g.innerHTML='';
+  top3.forEach((t,i)=>{
+    const color=getScoreColorRaw(t.score);const bg=getScoreBg(t.score);
+    const div=document.createElement('div');div.className='top3-card';
+    div.innerHTML=`<div class="top3-rank">${i+1}</div><div class="top3-dim">${t.dim}</div><div class="top3-score" style="color:${color};background:${bg};border:1px solid ${color};">${t.score}/4</div><div class="top3-desc">${dimDescriptions[t.id]||''}</div>`;
+    t3g.appendChild(div);
+  });
 
-  document.getElementById('execSummary').innerHTML='<div class="exec-summary">'+tier.execSummary+'</div>';
-
+  // Actions
   document.getElementById('actionContext').innerHTML=`<div class="action-context"><div class="ctx-pill" style="background:${tier.context.pillBg};color:${tier.context.pillColor};">${tier.context.pill}</div><div class="ctx-text">${tier.context.text}</div></div>`;
 
   const ac=document.getElementById('actionsContainer');ac.innerHTML='';
   tier.actions.forEach((a,i)=>{const div=document.createElement('div');div.className='action-card';div.innerHTML=`<div class="action-num">${i+1}</div><div class="action-content"><h3>${a.title}</h3><div class="action-desc">${a.desc}</div>${a.guardrail?`<div class="action-guardrail">${a.guardrail}</div>`:''}<div class="action-meta">${a.tags.map(t=>`<span class="meta-tag ${t.cls}">${t.label}</span>`).join('')}</div></div>`;ac.appendChild(div);});
 
+  // Prioritize
   const p=tier.prioritize;
   document.getElementById('prioritizeContainer').innerHTML=`<div class="prioritize"><h3>What to Authorize</h3><div class="prioritize-grid"><div class="prioritize-slot slot-quick"><div class="slot-label">${p.left.label}</div><div class="slot-hint">${p.left.hint}</div></div><div class="prioritize-slot slot-structural"><div class="slot-label">${p.right.label}</div><div class="slot-hint">${p.right.hint}</div></div></div></div>`;
 
+  // Phased Roadmap
   if(tier.phases){
-    document.getElementById('phasesHeader').style.display='block';
+    document.getElementById('roadmapBand').style.display='block';
     const pc=document.getElementById('phasesContainer');pc.innerHTML='';
     tier.phases.forEach(ph=>{
       const div=document.createElement('div');div.className='phase-card';
@@ -440,13 +531,35 @@ function showResults(){
     });
   }
 
+  // Closing
   const cl=tier.closing;
   document.getElementById('closingContainer').innerHTML=`<div class="closing"><p>${cl.main}</p><div class="sub">${cl.sub}</div></div>`;
 
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
-function restart(){answers={};currentQ=0;document.getElementById('results').style.display='none';document.getElementById('intro').style.display='block';window.scrollTo({top:0,behavior:'smooth'});}
+function restart(){answers={};currentQ=0;document.getElementById('results').style.display='none';document.getElementById('stickyScore').style.display='none';document.getElementById('roadmapBand').style.display='none';document.getElementById('intro').style.display='block';window.scrollTo({top:0,behavior:'smooth'});}
+
+// Keyboard navigation
+document.addEventListener('keydown',function(e){
+  // Only active during assessment
+  if(document.getElementById('assessment').style.display==='none')return;
+  const key=e.key;
+  // 1-4: select option
+  if(['1','2','3','4'].includes(key)){
+    const level=parseInt(key);
+    const q=questions[currentQ];
+    answers[q.id]=level;
+    renderQuestion();
+    return;
+  }
+  // Enter: advance (same as Next button)
+  if(key==='Enter'){e.preventDefault();nextQuestion();return;}
+  // ArrowRight: advance
+  if(key==='ArrowRight'){e.preventDefault();nextQuestion();return;}
+  // ArrowLeft: go back
+  if(key==='ArrowLeft'){e.preventDefault();prevQuestion();return;}
+});
 </script>
 </body>
 </html>
